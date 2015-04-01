@@ -30,6 +30,26 @@
 	  	<dd>${libro.categoria}</dd>
 	  </dl>
   	<h3>Ejemplares del libro</h3>
+  	<table class="table table-striped table-hover ">
+	  <thead>
+	    <tr>
+	      <th>ID</th>
+	      <th>Estado</th>
+	      <th>Acciones</th>
+	    </tr>
+	  </thead>
+	  <tbody>
+	  <c:forEach items="${libro.ejemplares}" var="ejemplar"> 
+		  <tr>
+		    <td>${ejemplar.id}</td>
+		    <td>${ejemplar.prestado? 'Prestado' : 'Libre'}</td>
+		    <td>
+		    	<a href="<spring:url value="/prestamo/${ejemplar.prestado? 'devolver' + 0 : 'nuevo'}" />" class="btn btn-${ejemplar.prestado? 'success' : 'primary'} btn-xs">${ejemplar.prestado? 'Devolver' : 'Prestar'}</a>
+		    </td>
+		  </tr>
+		</c:forEach>
+	  </tbody>
+    </table>
   </div>
 </div>
 </jsp:body>

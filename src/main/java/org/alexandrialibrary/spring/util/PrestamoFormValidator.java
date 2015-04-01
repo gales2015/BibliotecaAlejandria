@@ -16,8 +16,8 @@ public class PrestamoFormValidator implements Validator {
 
 	@Override
 	public void validate(Object model, Errors errors) {
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "usuario_id", "required.usuario_id", "Debe especificar el usuario.");
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "ejemplar_id", "required.ejemplar_id", "Debe especificar el ejemplar del libro.");
+		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "usuario", "required.usuario", "Debe especificar el usuario.");
+		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "ejemplar", "required.ejemplar", "Debe especificar el ejemplar del libro.");
 	}
 
 }

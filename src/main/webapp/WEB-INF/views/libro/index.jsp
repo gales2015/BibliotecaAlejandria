@@ -35,7 +35,7 @@
 		    <td>${libro.titulo}</td>
 		    <td>${libro.autor}</td>
 		    <td>${libro.categoria}</td>
-		    <td>0/${libro.totalEjemplares}</td>
+		    <td>${libro.totalEjemplaresLibres}/${libro.totalEjemplares}</td>
 		    <td>
 		    	<a href="<spring:url value="/libro/ver/${libro.isbn}" />" class="btn btn-info btn-xs">Ver</a>
 		    </td>

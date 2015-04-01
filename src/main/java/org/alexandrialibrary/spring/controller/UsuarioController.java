@@ -33,7 +33,7 @@ public class UsuarioController extends AbstractController {
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String index(Model model) {
 		logger.info("Iniciamos usuario/index [GET]");
-		List<Usuario> usuarios = usuarioDAO.getAllUsuario();
+		List<Usuario> usuarios = usuarioDAO.getAllUsuarios();
 		model.addAttribute("usuarios", usuarios);
 
 		logger.info("Pasamos el listado de usuarios a la vista.");

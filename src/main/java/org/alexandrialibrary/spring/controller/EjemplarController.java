@@ -27,7 +27,7 @@ public class EjemplarController extends AbstractController {
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String index(Model model) {
 		logger.info("Iniciamos ejemplar/index [GET]");
-		List<Ejemplar> ejemplars = ejemplarDAO.getAllEjemplar();
+		List<Ejemplar> ejemplars = ejemplarDAO.getAllEjemplares();
 		model.addAttribute("ejemplars", ejemplars);
 
 		logger.info("Pasamos el listado de ejemplars a la vista.");

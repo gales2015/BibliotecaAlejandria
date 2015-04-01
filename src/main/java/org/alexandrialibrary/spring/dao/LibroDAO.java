@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public interface LibroDAO {
 		
-	List<Libro> getAllLibro(); 
+	List<Libro> getAllLibros(); 
 
 	Libro getLibro(long isbn);
 	

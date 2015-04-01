@@ -15,7 +15,7 @@ public class EjemplarDAOImpl extends AbstractDAO implements EjemplarDAO {
 	
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<Ejemplar> getAllEjemplar() {
+	public List<Ejemplar> getAllEjemplares() {
 		Criteria criteria = this.getCurrentSession().createCriteria(Ejemplar.class);  
 		return criteria.list(); 
 	}

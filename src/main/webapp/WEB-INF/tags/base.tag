@@ -2,6 +2,7 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <%@attribute name="title" fragment="true"%>
 <%@attribute name="breadcrums" fragment="true"%>
+<%@attribute name="jsDocumentReady" fragment="true"%>
 <html>
 	<head>
 		<title><jsp:invoke fragment="title" /></title>
@@ -51,5 +52,10 @@
 <script type="text/javascript" src="<spring:url value="/resources/js/jquery.min.js" />" ></script>
 <script type="text/javascript" src="<spring:url value="/resources/js/bootstrap.min.js" />" ></script>
 <script type="text/javascript" src="<spring:url value="/resources/js/bootswatch.js" />" ></script>
+<script type="text/javascript">
+	$(document).ready(function () {
+		<jsp:invoke fragment="jsDocumentReady" />
+	});
+</script>
 </body>
 </html>

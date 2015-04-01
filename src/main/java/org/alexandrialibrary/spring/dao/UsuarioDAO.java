@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public interface UsuarioDAO {
 		
-	List<Usuario> getAllUsuario(); 
+	List<Usuario> getAllUsuarios(); 
 
 	Usuario getUsuario(long id);
 	

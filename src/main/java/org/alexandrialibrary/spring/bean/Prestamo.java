@@ -1,7 +1,9 @@
 package org.alexandrialibrary.spring.bean;
 
 import java.io.Serializable;
+import java.text.DateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,6 +21,10 @@ import javax.persistence.UniqueConstraint;
 public class Prestamo implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+
+	private static DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM, new Locale("es", "ES"));
+	
+	public static final int DIAS_PRESTAMO = 30;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -70,12 +76,20 @@ public class Prestamo implements Serializable {
 		return fechaInicio;
 	}
 
+	public String getFechaInicioFormat() {
+		return dateFormat.format(fechaInicio);
+	}
+
 	public void setFechaInicio(Date fechaInicio) {
 		this.fechaInicio = fechaInicio;
 	}
 
 	public Date getFechaFin() {
 		return fechaFin;
+	}
+
+	public String getFechaFinFormat() {
+		return dateFormat.format(fechaFin);
 	}
 
 	public void setFechaFin(Date fechaFin) {
@@ -86,8 +100,16 @@ public class Prestamo implements Serializable {
 		return fechaDevolucion;
 	}
 
+	public String getFechaDevolucionFormat() {
+		return dateFormat.format(fechaDevolucion);
+	}
+
 	public void setFechaDevolucion(Date fechaDevolucion) {
 		this.fechaDevolucion = fechaDevolucion;
+	}
+	
+	public boolean isDevuelto() {
+		return (this.fechaDevolucion != null);
 	}
 
 	public Usuario getUsuario() {

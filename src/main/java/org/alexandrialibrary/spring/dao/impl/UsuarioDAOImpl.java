@@ -15,7 +15,7 @@ public class UsuarioDAOImpl extends AbstractDAO implements UsuarioDAO {
 	
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<Usuario> getAllUsuario() {
+	public List<Usuario> getAllUsuarios() {
 		Criteria criteria = this.getCurrentSession().createCriteria(Usuario.class);  
 		return criteria.list(); 
 	}

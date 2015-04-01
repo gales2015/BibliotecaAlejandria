@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public interface EjemplarDAO {
 		
-	List<Ejemplar> getAllEjemplar(); 
+	List<Ejemplar> getAllEjemplares();
 
 	Ejemplar getEjemplar(long id);
 	

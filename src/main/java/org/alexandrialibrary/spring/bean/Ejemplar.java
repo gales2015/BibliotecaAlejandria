@@ -64,6 +64,11 @@ public class Ejemplar implements Serializable {
 	public void setLibro(Libro libro) {
 		this.libro = libro;
 	}
+	
+	public boolean isPrestado() {
+		// TODO Calcular si está prestado actualmente.
+		return false;
+	}
 
 	public List<Prestamo> getPrestamos() {
 		return prestamos;

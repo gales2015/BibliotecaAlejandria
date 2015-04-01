@@ -1,6 +1,10 @@
 package org.alexandrialibrary.spring.dao.impl;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 
 import org.alexandrialibrary.spring.bean.Prestamo;
 import org.alexandrialibrary.spring.dao.AbstractDAO;
@@ -15,7 +19,7 @@ public class PrestamoDAOImpl extends AbstractDAO implements PrestamoDAO {
 	
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<Prestamo> getAllPrestamo() {
+	public List<Prestamo> getAllPrestamos() {
 		Criteria criteria = this.getCurrentSession().createCriteria(Prestamo.class);  
 		return criteria.list(); 
 	}
@@ -26,7 +30,17 @@ public class PrestamoDAOImpl extends AbstractDAO implements PrestamoDAO {
 	}
 
 	@Override
-	public long save(Prestamo prestamo) {
+	public long save(Prestamo prestamo, Locale locale) {
+
+		Date fechaInicio = new Date();
+		Calendar calendar = new GregorianCalendar(locale);
+		calendar.setTime(fechaInicio);
+		calendar.add(Calendar.DATE, Prestamo.DIAS_PRESTAMO);
+		Date fechaFin = calendar.getTime();
+		
+
+		prestamo.setFechaInicio(fechaInicio);
+		prestamo.setFechaFin(fechaFin);
 		return (Long) this.getCurrentSession().save(prestamo); 
 	}
 

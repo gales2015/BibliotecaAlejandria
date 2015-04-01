@@ -2,14 +2,24 @@ package org.alexandrialibrary.spring.controller;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
+import org.alexandrialibrary.spring.bean.Ejemplar;
+import org.alexandrialibrary.spring.bean.Libro;
 import org.alexandrialibrary.spring.bean.Prestamo;
+import org.alexandrialibrary.spring.bean.Usuario;
+import org.alexandrialibrary.spring.dao.LibroDAO;
 import org.alexandrialibrary.spring.dao.PrestamoDAO;
+import org.alexandrialibrary.spring.dao.UsuarioDAO;
+import org.alexandrialibrary.spring.editor.EjemplarEditor;
+import org.alexandrialibrary.spring.editor.UsuarioEditor;
 import org.alexandrialibrary.spring.util.PrestamoFormValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,7 +33,25 @@ public class PrestamoController extends AbstractController {
 	private PrestamoDAO prestamoDAO;
 
 	@Autowired
+	private UsuarioDAO usuarioDAO;
+
+	@Autowired
+	private LibroDAO libroDAO;
+
+	@Autowired
 	private PrestamoFormValidator validator;
+	
+	@Autowired
+	private UsuarioEditor usuarioEditor;
+
+	@Autowired
+	private EjemplarEditor ejemplarEditor;
+
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        binder.registerCustomEditor(Usuario.class, this.usuarioEditor);
+        binder.registerCustomEditor(Ejemplar.class, this.ejemplarEditor);
+    }
 
 	/**
 	 * Listado de préstamos
@@ -34,7 +62,7 @@ public class PrestamoController extends AbstractController {
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String index(Model model) {
 		logger.info("Iniciamos prestamo/index [GET]");
-		List<Prestamo> prestamos = prestamoDAO.getAllPrestamo();
+		List<Prestamo> prestamos = prestamoDAO.getAllPrestamos();
 		model.addAttribute("prestamos", prestamos);
 
 		logger.info("Pasamos el listado de prestamos a la vista.");
@@ -53,6 +81,12 @@ public class PrestamoController extends AbstractController {
 		
 		model.addAttribute("prestamo", new Prestamo());
 		
+		List<Usuario> usuarios = usuarioDAO.getAllUsuarios();
+		model.addAttribute("usuarios", usuarios);
+		
+		List<Libro> libros = libroDAO.getAllLibros();
+		model.addAttribute("libros", libros);
+		
 		logger.info("Pasamos un prestamo nuevo a la vista, para vincularlo al form.");
 		return "prestamo/nuevo";
 	}
@@ -67,18 +101,25 @@ public class PrestamoController extends AbstractController {
 	 */
 	@RequestMapping(value = "/nuevo", method = RequestMethod.POST)
 	public String nuevo(@ModelAttribute("prestamo") Prestamo prestamo,
-			BindingResult result, Model model) {
+			BindingResult result, Model model, Locale locale) {
 		logger.info("Iniciamos prestamo/nuevo [POST]");
 
 		validator.validate(prestamo, result);
 		if (result.hasErrors()) {
 			logger.info("Formulario con errores, mostramos de nuevo el formulario.");
+			
+			List<Usuario> usuarios = usuarioDAO.getAllUsuarios();
+			model.addAttribute("usuarios", usuarios);
+			
+			List<Libro> libros = libroDAO.getAllLibros();
+			model.addAttribute("libros", libros);
+			
 			return "prestamo/nuevo";
 		}
 
 		logger.info("Formulario correcto! Guardamos el prestamo.");
-
-		prestamoDAO.save(prestamo);
+		
+		prestamoDAO.save(prestamo, locale);
 
 		logger.info("Redireccionamos a prestamo/listado [GET]");
 		return "redirect:/prestamo/";

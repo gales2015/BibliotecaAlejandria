@@ -16,7 +16,7 @@ public class LibroDAOImpl extends AbstractDAO implements LibroDAO {
 	
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<Libro> getAllLibro() {
+	public List<Libro> getAllLibros() {
 		Criteria criteria = this.getCurrentSession().createCriteria(Libro.class);
 		
 		List<Libro> lista = criteria.list();
@@ -30,7 +30,13 @@ public class LibroDAOImpl extends AbstractDAO implements LibroDAO {
 	 
 	@Override
 	public Libro getLibro(long isbn) {
-		return (Libro) this.getCurrentSession().get(Libro.class, isbn);
+		Libro libro = (Libro) this.getCurrentSession().get(Libro.class, isbn);
+		
+		// La carga de Ejemplares del Libro es "Lazy"
+		// Forzamos a que los cargue, para que estén disponibles en la vista
+		Hibernate.initialize(libro.getEjemplares());
+		
+		return libro;
 	}
 
 	@Override
