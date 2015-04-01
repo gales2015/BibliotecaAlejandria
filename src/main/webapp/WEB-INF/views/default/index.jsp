@@ -5,7 +5,11 @@
 <jsp:attribute name="title">Biblioteca de Alejandría</jsp:attribute>
 
 <jsp:body>
-<h1>Biblioteca de Alejandría</h1>
+<div class="jumbotron">
+  <h1>Biblioteca de Alejandría</h1>
+  <p>¡Bienvenido/a a la Biblioteca de Alejandría! Puede comenzar a trabajar directamente.</p>
+  <p><a class="btn btn-primary btn-lg">Realizar préstamo</a></p>
+</div>
 </jsp:body>
 
 </t:base>

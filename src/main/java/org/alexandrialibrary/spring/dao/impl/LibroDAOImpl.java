@@ -6,6 +6,7 @@ import org.alexandrialibrary.spring.bean.Libro;
 import org.alexandrialibrary.spring.dao.AbstractDAO;
 import org.alexandrialibrary.spring.dao.LibroDAO;
 import org.hibernate.Criteria;
+import org.hibernate.Hibernate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,8 +17,15 @@ public class LibroDAOImpl extends AbstractDAO implements LibroDAO {
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<Libro> getAllLibro() {
-		Criteria criteria = this.getCurrentSession().createCriteria(Libro.class);  
-		return criteria.list(); 
+		Criteria criteria = this.getCurrentSession().createCriteria(Libro.class);
+		
+		List<Libro> lista = criteria.list();
+		for (Libro libro : lista) {
+			// La carga de Ejemplares del Libro es "Lazy"
+			// Forzamos a que los cargue, para que estén disponibles en la vista
+			Hibernate.initialize(libro.getEjemplares());
+		}
+		return lista; 
 	}
 	 
 	@Override

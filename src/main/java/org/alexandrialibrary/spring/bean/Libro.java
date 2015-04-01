@@ -92,5 +92,18 @@ public class Libro implements Serializable {
 	public void setEjemplares(List<Ejemplar> ejemplares) {
 		this.ejemplares = ejemplares;
 	}
+	
+	public int getTotalEjemplares() {
+		return ejemplares.size();
+	}
+	
+	public int getTotalEjemplaresLibres() {
+		// TODO Calcular ejemplares libres de la lista
+		return 0;
+	}
+	
+	public int getTotalEjemplaresPrestados() {
+		return (getTotalEjemplares() - getTotalEjemplaresLibres());
+	}
 
 }

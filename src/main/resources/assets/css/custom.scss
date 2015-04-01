@@ -1,0 +1,33 @@
+@import "variables";
+
+body {
+  padding-top: $body-padding-top;
+}
+
+.container {
+	&.global-container {
+		margin-top: 50px;
+	}
+}
+
+.panel {
+	.panel-title {
+		font-weight: bold;
+	}
+	
+	.col-lg-bold {
+		font-weight: bold;
+	}
+}
+
+.form-horizontal {
+	@media (min-width: $screen-sm-min) {
+    .control-label {
+      text-align: left;
+    }
+  }
+  
+  span.required {
+   color: $brand-danger;
+  }
+}
