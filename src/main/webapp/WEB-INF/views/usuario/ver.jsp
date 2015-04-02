@@ -34,6 +34,39 @@
 	  	<dd>${usuario.direccion}</dd>
 	  </dl>
   	<h3>Préstamos del usuario</h3>
+  	
+  	<p><a href="<spring:url value="/prestamo/nuevo?usuario=${usuario.id}" />" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> Nuevo préstamo</a></p>
+
+    <table class="table table-striped table-hover ">
+	  <thead>
+	    <tr>
+	      <th>ID</th>
+	      <th>Fecha inicio</th>
+	      <th>Fecha fin</th>
+	      <th>Fecha devolución</th>
+	      <th>Libro</th>
+	      <th>Ejemplar</th>
+	      <th>Acciones</th>
+	    </tr>
+	  </thead>
+	  <tbody>
+	  <c:forEach items="${usuario.prestamos}" var="prestamo"> 
+		  <tr>
+		    <td>${prestamo.id}</td>
+		    <td>${prestamo.fechaInicioFormat}</td>
+		    <td>${prestamo.fechaFinFormat}</td>
+		    <td>${prestamo.devuelto ? prestamo.fechaDevolucionFormat : "<em>Pendiente</em>"}</td>
+		    <td>${prestamo.ejemplar.libro}</td>
+		    <td>${prestamo.ejemplar.id}</td>
+		    <td>
+		    	<c:if test="${!prestamo.devuelto}">
+		    		<a href="<spring:url value="/prestamo/devolver/${prestamo.id}" />" class="btn btn-success btn-xs">Devolver</a>
+		    	</c:if>
+		    </td>
+		  </tr>
+		</c:forEach>
+	  </tbody>
+    </table>
   </div>
 </div>
 </jsp:body>

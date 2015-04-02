@@ -38,13 +38,14 @@
 		    <td>${prestamo.id}</td>
 		    <td>${prestamo.fechaInicioFormat}</td>
 		    <td>${prestamo.fechaFinFormat}</td>
-		    <td>${prestamo.devuelto ? fechaDevolucionFormat : "<em>Pendiente</em>"}</td>
+		    <td>${prestamo.devuelto ? prestamo.fechaDevolucionFormat : "<em>Pendiente</em>"}</td>
 		    <td>${prestamo.ejemplar.libro}</td>
 		    <td>${prestamo.ejemplar.id}</td>
 		    <td>${prestamo.usuario}</td>
 		    <td>
-		    	<a href="<spring:url value="/prestamo/ver/${prestamo.id}" />" class="btn btn-info btn-xs">Ver</a>
-		    	<a href="<spring:url value="/prestamo/devolver/${prestamo.id}" />" class="btn btn-success btn-xs">Devolver</a>
+		    	<c:if test="${!prestamo.devuelto}">
+		    		<a href="<spring:url value="/prestamo/devolver/${prestamo.id}" />" class="btn btn-success btn-xs">Devolver</a>
+		    	</c:if>
 		    </td>
 		  </tr>
 		</c:forEach>

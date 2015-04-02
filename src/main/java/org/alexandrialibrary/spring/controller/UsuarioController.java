@@ -111,6 +111,14 @@ public class UsuarioController extends AbstractController {
 	public String eliminar(@PathVariable Long id, Model model) {
 		logger.info("Iniciamos usuario/eliminar/{id} [GET]");
 
+		Usuario usuario = usuarioDAO.getUsuario(id);
+		if (usuario.hasPrestamosPendientes()) {
+			logger.info("Tiene préstamos pendientes, no se puede eliminar.");
+			logger.info("Redireccionamos a usuario/ver/{id} [GET]");
+			return String.format("redirect:/usuario/ver/%d", id);
+		}
+
+		logger.info("No tiene préstamos pendientes, eliminamos el usuario.");
 		usuarioDAO.delete(id);
 
 		logger.info("Redireccionamos a usuario/listado [GET]");

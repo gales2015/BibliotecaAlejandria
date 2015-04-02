@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -13,6 +14,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 @Entity
 @Table(name = "ejemplar")
@@ -29,7 +33,8 @@ public class Ejemplar implements Serializable {
 	@JoinColumn(name = "libro_id", columnDefinition = "bigint")
 	private Libro libro;
 	
-	@OneToMany(targetEntity = Prestamo.class, mappedBy = "ejemplar", cascade={CascadeType.ALL})
+	@OneToMany(targetEntity = Prestamo.class, mappedBy = "ejemplar", cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
+	@Fetch(FetchMode.SELECT)
 	private List<Prestamo> prestamos;
 
 
@@ -67,6 +72,11 @@ public class Ejemplar implements Serializable {
 	
 	public boolean isPrestado() {
 		// TODO Calcular si está prestado actualmente.
+		for (Prestamo prestamo : prestamos) {
+			if (!prestamo.isDevuelto()) {
+				return true;
+			}
+		}
 		return false;
 	}
 
@@ -76,6 +86,17 @@ public class Ejemplar implements Serializable {
 
 	public void setPrestamos(List<Prestamo> prestamos) {
 		this.prestamos = prestamos;
+	}
+	
+	@SuppressWarnings("null")
+	public long getPrestamoIdPendiente() {
+		for (Prestamo prestamo : prestamos) {
+			if (!prestamo.isDevuelto()) {
+				return prestamo.getId();
+			}
+		}
+		
+		return (Long) null;
 	}
 
 }

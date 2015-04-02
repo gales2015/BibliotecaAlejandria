@@ -76,8 +76,20 @@ $("#libro").trigger("change");
 	      <div class="col-lg-6">
 	      <select id="libro" class="form-control">
 			<option value="-1">Selecciona un libro</option>
+			
+			<%-- Evaluamos si se ha especificado un libro a seleccionar --%>
+			<c:catch var="exception">${libro_isbn}</c:catch>
 	      	<c:forEach items="${libros}" var="libro">
-               <option value="${libro.isbn}">${libro}</option>
+	      		<c:choose>
+	      		<c:when test="${not empty exception}">
+	      		  <%-- Si da error es que no hay ISBN especificado --%>
+               	  <option value="${libro.isbn}">${libro}</option>
+               	</c:when>
+               	<c:otherwise>
+	      		  <%-- En caso contrario, evaluamos si coincide para cada elemento y lo seleccionamos --%>
+               	  <option value="${libro.isbn}" ${libro.isbn == libro_isbn ? 'selected="selected"' : '' }>${libro}</option>
+               	</c:otherwise>
+               	</c:choose>
             </c:forEach>
 			</select>
 	      	</div>

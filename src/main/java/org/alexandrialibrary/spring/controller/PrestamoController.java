@@ -1,6 +1,5 @@
 package org.alexandrialibrary.spring.controller;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -24,6 +23,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/prestamo")
@@ -72,14 +72,32 @@ public class PrestamoController extends AbstractController {
 	/**
 	 * Formulario de nuevo préstamo [GET]
 	 * 
+	 * Se pueden añadir a la URL las IDs de Usuario y/o Libro. Ejemplo:
+	 * 
+	 * prestamo/nuevo?usuario=1
+	 * prestamo/nuevo?usuario=1&libro=2
+	 * 
 	 * @param model
 	 * @return
 	 */
 	@RequestMapping(value = "/nuevo", method = RequestMethod.GET)
-	public String nuevo(Model model) {
+	public String nuevo(@RequestParam(value = "usuario", required = false) Long usuario_id, 
+			@RequestParam(value = "libro", required = false) Long libro_isbn, Model model) {
 		logger.info("Iniciamos prestamo/nuevo [GET]");
 		
-		model.addAttribute("prestamo", new Prestamo());
+		Prestamo prestamo = new Prestamo();
+		if (usuario_id != null) {
+			// Si nos especifican un usuario
+			Usuario usuario = usuarioDAO.getUsuario(usuario_id);
+			prestamo.setUsuario(usuario);
+		}
+		
+		if (libro_isbn != null) {
+			// Si nos especifican un libro
+			model.addAttribute("libro_isbn", libro_isbn);
+		}
+		
+		model.addAttribute("prestamo", prestamo);
 		
 		List<Usuario> usuarios = usuarioDAO.getAllUsuarios();
 		model.addAttribute("usuarios", usuarios);
@@ -126,23 +144,6 @@ public class PrestamoController extends AbstractController {
 	}
 	
 	/**
-	 * Ver un préstamo concreto [GET]
-	 * 
-	 * @param id
-	 * @param model
-	 * @return
-	 */
-	@RequestMapping(value = "/ver/{id}", method = RequestMethod.GET)
-	public String ver(@PathVariable Long id, Model model) {
-		logger.info("Iniciamos prestamo/ver/{id} [GET]");
-		
-		Prestamo prestamo = prestamoDAO.getPrestamo(id);		
-		model.addAttribute("prestamo", prestamo);
-		
-		return "prestamo/ver";
-	}
-	
-	/**
 	 * Devolver un préstamo concreto, estableciendo la fecha de devolución como "ahora" [GET]
 	 * 
 	 * @param id
@@ -150,18 +151,20 @@ public class PrestamoController extends AbstractController {
 	 * @return
 	 */
 	@RequestMapping(value = "/devolver/{id}", method = RequestMethod.GET)
-	public String editar(@PathVariable Long id, Model model) {
-		logger.info("Iniciamos prestamo/editar/{id} [GET]");
+	public String devolver(@PathVariable Long id, Model model) {
+		logger.info("Iniciamos prestamo/devolver/{id} [GET]");
 		
 		Prestamo prestamo = prestamoDAO.getPrestamo(id);
-		prestamo.setFechaDevolucion(new Date());
-
-		logger.info("Actualizamos la información del préstamo estableciendo la devolución.");
 		
-		prestamoDAO.update(prestamo);
+		if (!prestamo.isDevuelto()) {
+			// Si no está devuelto, lo actualizamos (se establecerá la fecha de devolución)
+			logger.info("Actualizamos la información del préstamo estableciendo la devolución.");
+			
+			prestamoDAO.update(prestamo);			
+		}
 
 		logger.info("Redireccionamos a prestamo/listado [GET]");
-		return String.format("redirect:/prestamo/ver/%d", id);
+		return "redirect:/prestamo/";
 	}
 
 }

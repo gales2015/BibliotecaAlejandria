@@ -6,11 +6,15 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 @Entity
 @Table(name = "usuario")
@@ -42,7 +46,8 @@ public class Usuario implements Serializable {
 	@Column(name = "direccion")
 	private String direccion;
 
-	@OneToMany(targetEntity = Prestamo.class, mappedBy = "usuario", cascade={CascadeType.ALL})
+	@OneToMany(targetEntity = Prestamo.class, mappedBy = "usuario", cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
+	@Fetch(FetchMode.SELECT)
 	private List<Prestamo> prestamos;
 
 
@@ -119,6 +124,15 @@ public class Usuario implements Serializable {
 
 	public void setPrestamos(List<Prestamo> prestamos) {
 		this.prestamos = prestamos;
+	}
+	
+	public boolean hasPrestamosPendientes() {
+		for (Prestamo prestamo : prestamos) {
+			if (!prestamo.isDevuelto()) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

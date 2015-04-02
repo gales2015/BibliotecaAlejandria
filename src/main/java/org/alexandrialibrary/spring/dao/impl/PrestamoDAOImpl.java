@@ -50,11 +50,9 @@ public class PrestamoDAOImpl extends AbstractDAO implements PrestamoDAO {
 	 */
 	@Override
 	public void update(Prestamo prestamo) {
-		Prestamo existingPrestamo = getPrestamo(prestamo.getId());
+		prestamo.setFechaDevolucion(new Date());
 		
-		existingPrestamo.setFechaDevolucion(prestamo.getFechaDevolucion());
-		
-		this.getCurrentSession().merge(existingPrestamo);
+		this.getCurrentSession().merge(prestamo);
 	}
 
 	@Override

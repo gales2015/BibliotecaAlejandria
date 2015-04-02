@@ -6,11 +6,15 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 @Entity
 @Table(name = "libro")
@@ -32,7 +36,8 @@ public class Libro implements Serializable {
 	@Column(name = "categoria")
 	private String categoria;
 	
-	@OneToMany(targetEntity = Ejemplar.class, mappedBy = "libro", cascade={CascadeType.ALL})
+	@OneToMany(targetEntity = Ejemplar.class, mappedBy = "libro", cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
+	@Fetch(FetchMode.SELECT)
 	private List<Ejemplar> ejemplares;
 	
 
@@ -97,13 +102,19 @@ public class Libro implements Serializable {
 		return ejemplares.size();
 	}
 	
-	public int getTotalEjemplaresLibres() {
-		// TODO Calcular ejemplares libres de la lista
-		return 0;
+	public int getTotalEjemplaresPrestados() {
+		// TODO Calcular ejemplares prestado de la lista
+		int total = 0;
+		for (Ejemplar ejemplar : ejemplares) {
+			if (ejemplar.isPrestado()) {
+				total++;
+			}
+		}
+		return total;
 	}
 	
-	public int getTotalEjemplaresPrestados() {
-		return (getTotalEjemplares() - getTotalEjemplaresLibres());
+	public int getTotalEjemplaresLibres() {
+		return (getTotalEjemplares() - getTotalEjemplaresPrestados());
 	}
 
 }
