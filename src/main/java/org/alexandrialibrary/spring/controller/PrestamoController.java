@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/prestamo")
@@ -119,7 +120,7 @@ public class PrestamoController extends AbstractController {
 	 */
 	@RequestMapping(value = "/nuevo", method = RequestMethod.POST)
 	public String nuevo(@ModelAttribute("prestamo") Prestamo prestamo,
-			BindingResult result, Model model, Locale locale) {
+			BindingResult result, Model model, Locale locale, final RedirectAttributes redirectAttributes) {
 		logger.info("Iniciamos prestamo/nuevo [POST]");
 
 		validator.validate(prestamo, result);
@@ -138,6 +139,11 @@ public class PrestamoController extends AbstractController {
 		logger.info("Formulario correcto! Guardamos el prestamo.");
 		
 		prestamoDAO.save(prestamo, locale);
+		
+		redirectAttributes.addFlashAttribute("success", 
+				String.format("El préstamo del libro <strong>%s</strong> para el usuario <strong>%s %s</strong> se ha realizado con éxito.", 
+				prestamo.getEjemplar().getLibro().getTitulo(), prestamo.getUsuario().getNombre(), 
+				prestamo.getUsuario().getApellidos()));
 
 		logger.info("Redireccionamos a prestamo/listado [GET]");
 		return "redirect:/prestamo/";
@@ -151,16 +157,21 @@ public class PrestamoController extends AbstractController {
 	 * @return
 	 */
 	@RequestMapping(value = "/devolver/{id}", method = RequestMethod.GET)
-	public String devolver(@PathVariable Long id, Model model) {
+	public String devolver(@PathVariable Long id, final RedirectAttributes redirectAttributes) {
 		logger.info("Iniciamos prestamo/devolver/{id} [GET]");
 		
 		Prestamo prestamo = prestamoDAO.getPrestamo(id);
 		
-		if (!prestamo.isDevuelto()) {
+		if (!prestamo.isDevuelto()) {			
 			// Si no está devuelto, lo actualizamos (se establecerá la fecha de devolución)
 			logger.info("Actualizamos la información del préstamo estableciendo la devolución.");
 			
-			prestamoDAO.update(prestamo);			
+			prestamoDAO.update(prestamo);
+			
+			redirectAttributes.addFlashAttribute("success", 
+					String.format("El préstamo del libro <strong>%s</strong> para el usuario <strong>%s %s</strong> se ha devuelto con éxito.", 
+					prestamo.getEjemplar().getLibro().getTitulo(), prestamo.getUsuario().getNombre(), 
+					prestamo.getUsuario().getApellidos()));
 		}
 
 		logger.info("Redireccionamos a prestamo/listado [GET]");

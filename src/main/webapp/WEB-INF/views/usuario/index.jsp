@@ -43,7 +43,7 @@
 		    <td>
 		    	<a href="<spring:url value="/usuario/ver/${usuario.id}" />" class="btn btn-info btn-xs">Ver</a>
 		    	<a href="<spring:url value="/usuario/editar/${usuario.id}" />" class="btn btn-primary btn-xs">Editar</a>
-		    	<a href="<spring:url value="/usuario/eliminar/${usuario.id}" />" class="btn btn-danger btn-xs">Eliminar</a>
+		    	<a href="<spring:url value="/usuario/eliminar/${usuario.id}" />" class="btn btn-${usuario.hasPrestamosPendientes ? 'default disabled': 'danger'} btn-xs">Eliminar</a>
 		    </td>
 		  </tr>
 		</c:forEach>

@@ -44,7 +44,7 @@
 		    <td>${prestamo.usuario}</td>
 		    <td>
 		    	<c:if test="${!prestamo.devuelto}">
-		    		<a href="<spring:url value="/prestamo/devolver/${prestamo.id}" />" class="btn btn-success btn-xs">Devolver</a>
+		    		<a href="<spring:url value="/prestamo/devolver/${prestamo.id}" />" class="btn btn-primary btn-xs">Devolver</a>
 		    	</c:if>
 		    </td>
 		  </tr>

@@ -1,5 +1,6 @@
 <%@ tag language="java" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@attribute name="title" fragment="true"%>
 <%@attribute name="breadcrums" fragment="true"%>
 <%@attribute name="jsDocumentReady" fragment="true"%>
@@ -27,23 +28,48 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
         <li><a href="<spring:url value="/libro/" />">Libros</a></li>
-        <li><a href="<spring:url value="/ejemplar/" />">Ejemplares</a></li>
         <li><a href="<spring:url value="/prestamo/" />">Préstamos</a></li>
         <li><a href="<spring:url value="/usuario/" />">Usuarios</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-      	<li class="dropdown">
-          <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="themes">Ayuda <span class="caret"></span></a>
-            <ul class="dropdown-menu" aria-labelledby="themes">
-		      <li><a href="#">Acerca de Biblioteca de Alejandría</a></li>
-		    </ul>
-		</li>
+		<li><a href="<spring:url value="/about" />">Acerca de Biblioteca de Alejandría</a></li>
       </ul>
     </div>
   </div>
 </nav>
 
 <div class="container global-container">
+
+<c:catch var="info"/>
+<c:catch var="success"/>
+<c:catch var="warning"/>
+<c:catch var="danger"/>
+<c:choose>
+	<c:when test="${not empty info}">
+		<div class="alert alert-dismissible alert-info">
+		  <button type="button" class="close" data-dismiss="alert">×</button>
+		  ${info}
+		</div>
+	</c:when>
+	<c:when test="${not empty success}">
+		<div class="alert alert-dismissible alert-success">
+		  <button type="button" class="close" data-dismiss="alert">×</button>
+		  ${success}
+		</div>
+	</c:when>
+	<c:when test="${not empty warning}">
+		<div class="alert alert-dismissible alert-warning">
+		  <button type="button" class="close" data-dismiss="alert">×</button>
+		  ${warning}
+		</div>
+	</c:when>
+	<c:when test="${not empty danger}">
+		<div class="alert alert-dismissible alert-danger">
+		  <button type="button" class="close" data-dismiss="alert">×</button>
+		  ${danger}
+		</div>
+	</c:when>
+</c:choose>
 
 <jsp:doBody />
 

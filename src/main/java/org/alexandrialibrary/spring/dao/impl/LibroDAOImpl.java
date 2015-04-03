@@ -2,10 +2,12 @@ package org.alexandrialibrary.spring.dao.impl;
 
 import java.util.List;
 
+import org.alexandrialibrary.spring.bean.Ejemplar;
 import org.alexandrialibrary.spring.bean.Libro;
 import org.alexandrialibrary.spring.dao.AbstractDAO;
 import org.alexandrialibrary.spring.dao.LibroDAO;
 import org.hibernate.Criteria;
+import org.hibernate.Hibernate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,12 +19,24 @@ public class LibroDAOImpl extends AbstractDAO implements LibroDAO {
 	@SuppressWarnings("unchecked")
 	public List<Libro> getAllLibros() {
 		Criteria criteria = this.getCurrentSession().createCriteria(Libro.class);
-		return criteria.list();
+		List<Libro> libros = criteria.list();
+		for (Libro libro : libros) {
+			List<Ejemplar> ejemplares = libro.getEjemplares();
+			for (Ejemplar ejemplar : ejemplares) {
+				Hibernate.initialize(ejemplar.getPrestamos());				
+			}
+		}
+		return libros;
 	}
 	 
 	@Override
 	public Libro getLibro(long isbn) {
-		return (Libro) this.getCurrentSession().get(Libro.class, isbn);
+		Libro libro = (Libro) this.getCurrentSession().get(Libro.class, isbn);
+		List<Ejemplar> ejemplares = libro.getEjemplares();
+		for (Ejemplar ejemplar : ejemplares) {
+			Hibernate.initialize(ejemplar.getPrestamos());				
+		}
+		return libro;
 	}
 
 	@Override

@@ -6,6 +6,7 @@ import org.alexandrialibrary.spring.bean.Ejemplar;
 import org.alexandrialibrary.spring.dao.AbstractDAO;
 import org.alexandrialibrary.spring.dao.EjemplarDAO;
 import org.hibernate.Criteria;
+import org.hibernate.Hibernate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,13 +17,20 @@ public class EjemplarDAOImpl extends AbstractDAO implements EjemplarDAO {
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<Ejemplar> getAllEjemplares() {
-		Criteria criteria = this.getCurrentSession().createCriteria(Ejemplar.class);  
-		return criteria.list(); 
+		Criteria criteria = this.getCurrentSession().createCriteria(Ejemplar.class);
+		List<Ejemplar> ejemplares = criteria.list();
+		for (Ejemplar ejemplar : ejemplares) {
+			Hibernate.initialize(ejemplar.getPrestamos());
+		}
+		return ejemplares; 
 	}
 	 
 	@Override
 	public Ejemplar getEjemplar(long id) {
-		return (Ejemplar) this.getCurrentSession().get(Ejemplar.class, id);
+		Ejemplar ejemplar = (Ejemplar) this.getCurrentSession().get(Ejemplar.class, id);
+		Hibernate.initialize(ejemplar.getPrestamos());
+		
+		return ejemplar;
 	}
 
 	@Override

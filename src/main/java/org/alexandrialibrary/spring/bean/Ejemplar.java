@@ -6,7 +6,6 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -33,7 +32,7 @@ public class Ejemplar implements Serializable {
 	@JoinColumn(name = "libro_id", columnDefinition = "bigint")
 	private Libro libro;
 	
-	@OneToMany(targetEntity = Prestamo.class, mappedBy = "ejemplar", cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
+	@OneToMany(targetEntity = Prestamo.class, mappedBy = "ejemplar", cascade={CascadeType.ALL}, orphanRemoval = true)
 	@Fetch(FetchMode.SELECT)
 	private List<Prestamo> prestamos;
 
@@ -71,7 +70,6 @@ public class Ejemplar implements Serializable {
 	}
 	
 	public boolean isPrestado() {
-		// TODO Calcular si está prestado actualmente.
 		for (Prestamo prestamo : prestamos) {
 			if (!prestamo.isDevuelto()) {
 				return true;

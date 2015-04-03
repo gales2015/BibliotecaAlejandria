@@ -1,7 +1,6 @@
 package org.alexandrialibrary.spring.controller;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -9,13 +8,23 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class DefaultController extends AbstractController {
 	
 	/**
-	 * Muestra la página de inicio
+	 * Muestra la página de Inicio
 	 */
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String index(Model model) {
+	public String index() {
 		logger.info("Iniciamos default/index [GET]");
 		
 		return "default/index";
+	}
+	
+	/**
+	 * Muestra la página de Acerca de
+	 */
+	@RequestMapping(value = "/about", method = RequestMethod.GET)
+	public String about() {
+		logger.info("Iniciamos default/about [GET]");
+		
+		return "default/about";
 	}
 	
 }

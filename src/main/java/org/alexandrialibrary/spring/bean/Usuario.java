@@ -6,7 +6,6 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -46,7 +45,7 @@ public class Usuario implements Serializable {
 	@Column(name = "direccion")
 	private String direccion;
 
-	@OneToMany(targetEntity = Prestamo.class, mappedBy = "usuario", cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
+	@OneToMany(targetEntity = Prestamo.class, mappedBy = "usuario", cascade={CascadeType.ALL}, orphanRemoval = true)
 	@Fetch(FetchMode.SELECT)
 	private List<Prestamo> prestamos;
 
@@ -126,7 +125,7 @@ public class Usuario implements Serializable {
 		this.prestamos = prestamos;
 	}
 	
-	public boolean hasPrestamosPendientes() {
+	public boolean getHasPrestamosPendientes() {
 		for (Prestamo prestamo : prestamos) {
 			if (!prestamo.isDevuelto()) {
 				return true;

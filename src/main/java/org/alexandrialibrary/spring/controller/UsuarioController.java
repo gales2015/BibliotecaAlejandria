@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/usuario")
@@ -66,7 +67,7 @@ public class UsuarioController extends AbstractController {
 	 */
 	@RequestMapping(value = "/nuevo", method = RequestMethod.POST)
 	public String nuevo(@ModelAttribute("usuario") Usuario usuario,
-			BindingResult result, Model model) {
+			BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
 		logger.info("Iniciamos usuario/nuevo [POST]");
 
 		validator.validate(usuario, result);
@@ -78,6 +79,9 @@ public class UsuarioController extends AbstractController {
 		logger.info("Formulario correcto! Guardamos el usuario.");
 
 		usuarioDAO.save(usuario);
+		
+		redirectAttributes.addFlashAttribute("success", String.format("Usuario '%s %s' creado con éxito.", 
+				usuario.getNombre(), usuario.getApellidos()));
 
 		logger.info("Redireccionamos a usuario/listado [GET]");
 		return "redirect:/usuario/";
@@ -108,11 +112,16 @@ public class UsuarioController extends AbstractController {
 	 * @return
 	 */
 	@RequestMapping(value = "/eliminar/{id}", method = RequestMethod.GET)
-	public String eliminar(@PathVariable Long id, Model model) {
+	public String eliminar(@PathVariable Long id, Model model, final RedirectAttributes redirectAttributes) {
 		logger.info("Iniciamos usuario/eliminar/{id} [GET]");
 
 		Usuario usuario = usuarioDAO.getUsuario(id);
-		if (usuario.hasPrestamosPendientes()) {
+		if (usuario.getHasPrestamosPendientes()) {
+			
+			redirectAttributes.addFlashAttribute("danger", 
+					String.format("El usuario <strong>%s %s</strong> tiene préstamos pendientes y no se puede eliminar.", 
+					usuario.getNombre(), usuario.getApellidos()));
+			
 			logger.info("Tiene préstamos pendientes, no se puede eliminar.");
 			logger.info("Redireccionamos a usuario/ver/{id} [GET]");
 			return String.format("redirect:/usuario/ver/%d", id);
@@ -120,6 +129,9 @@ public class UsuarioController extends AbstractController {
 
 		logger.info("No tiene préstamos pendientes, eliminamos el usuario.");
 		usuarioDAO.delete(id);
+		
+		redirectAttributes.addFlashAttribute("success", String.format("Usuario <strong>%s %s</strong> eliminado con éxito.", 
+				usuario.getNombre(), usuario.getApellidos()));
 
 		logger.info("Redireccionamos a usuario/listado [GET]");
 		return "redirect:/usuario/";

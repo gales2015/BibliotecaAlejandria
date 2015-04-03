@@ -6,6 +6,7 @@ import org.alexandrialibrary.spring.bean.Usuario;
 import org.alexandrialibrary.spring.dao.AbstractDAO;
 import org.alexandrialibrary.spring.dao.UsuarioDAO;
 import org.hibernate.Criteria;
+import org.hibernate.Hibernate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,13 +17,20 @@ public class UsuarioDAOImpl extends AbstractDAO implements UsuarioDAO {
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<Usuario> getAllUsuarios() {
-		Criteria criteria = this.getCurrentSession().createCriteria(Usuario.class);  
-		return criteria.list(); 
+		Criteria criteria = this.getCurrentSession().createCriteria(Usuario.class);
+		List<Usuario> usuarios = criteria.list();
+		for (Usuario usuario : usuarios) {
+			Hibernate.initialize(usuario.getPrestamos());
+		}
+		return usuarios; 
 	}
 	 
 	@Override
 	public Usuario getUsuario(long id) {
-		return (Usuario) this.getCurrentSession().get(Usuario.class, id);
+		Usuario usuario = (Usuario) this.getCurrentSession().get(Usuario.class, id);
+		Hibernate.initialize(usuario.getPrestamos());
+		
+		return usuario;
 	}
 
 	@Override
