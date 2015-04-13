@@ -12,9 +12,6 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-
 @Entity
 @Table(name = "usuario")
 public class Usuario implements Serializable {
@@ -46,13 +43,16 @@ public class Usuario implements Serializable {
 	private String direccion;
 
 	@OneToMany(targetEntity = Prestamo.class, mappedBy = "usuario", cascade={CascadeType.ALL}, orphanRemoval = true)
-	@Fetch(FetchMode.SELECT)
 	private List<Prestamo> prestamos;
 
 
 	/* -------- */
 	public Usuario() {
 		super();
+	}
+	
+	public Usuario(String nombre) {
+		this.nombre = nombre;
 	}
 
 	public Usuario(String nombre, String apellidos, String dni, String email, String direccion) {
@@ -62,7 +62,7 @@ public class Usuario implements Serializable {
 		this.email = email;
 		this.direccion = direccion;		
 	}
-	
+
 	public String toString() {
 		return this.nombre + " " + this.apellidos;
 	}

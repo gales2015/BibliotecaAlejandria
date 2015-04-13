@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -28,16 +29,38 @@ public class UsuarioController extends AbstractController {
 	/**
 	 * Listado de usuarios
 	 * 
+	 * También permite buscar por nombre parcial de usuarios.
+	 * 
+	 * Ejemplo: /?nombre=Pepe
+	 * 
 	 * @param model
 	 * @return
 	 */
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String index(Model model) {
+	public String index(@RequestParam(value = "nombre", required = false) String nombre, Model model) {
 		logger.info("Iniciamos usuario/index [GET]");
-		List<Usuario> usuarios = usuarioDAO.getAllUsuarios();
+		
+		Usuario usuario = null;
+		List<Usuario> usuarios = null;
+		
+		if (nombre != null && !nombre.equals("")) {
+			// Si estamos buscando por nombre parcial:
+			// - Guardamos el nombre en el formulario "usuario"
+			// - Obtenemos la lista de usuarios coincidentes
+			usuario = new Usuario(nombre);
+			usuarios = usuarioDAO.getUsuariosByNombreParcial(nombre);
+		} else {
+			// Si no estamos buscando:
+			// - Creamos un formulario "usuario" en blanco
+			// - Obtenemos la lista de usuarios por defecto
+			usuario = new Usuario();
+			usuarios = usuarioDAO.getAllUsuarios();
+		}
+
+		logger.info("Pasamos el formulario y el listado de usuarios a la vista.");
+		model.addAttribute("usuario", usuario);
 		model.addAttribute("usuarios", usuarios);
 
-		logger.info("Pasamos el listado de usuarios a la vista.");
 		return "usuario/index";
 	}
 

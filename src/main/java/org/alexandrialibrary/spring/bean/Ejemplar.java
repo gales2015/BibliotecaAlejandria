@@ -14,9 +14,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-
 @Entity
 @Table(name = "ejemplar")
 public class Ejemplar implements Serializable {
@@ -33,7 +30,6 @@ public class Ejemplar implements Serializable {
 	private Libro libro;
 	
 	@OneToMany(targetEntity = Prestamo.class, mappedBy = "ejemplar", cascade={CascadeType.ALL}, orphanRemoval = true)
-	@Fetch(FetchMode.SELECT)
 	private List<Prestamo> prestamos;
 
 

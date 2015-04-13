@@ -12,9 +12,12 @@ public interface LibroDAO {
 
 	Libro getLibro(long isbn);
 	
+	List<Libro> getLibrosByTituloParcial(String titulo);
+	
 	long save(Libro libro);
 	
 	void update(Libro libro);
 	
 	void delete(long isbn);
+
 }

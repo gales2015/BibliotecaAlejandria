@@ -45,13 +45,17 @@ public class Libro implements Serializable {
 	public Libro() {
 		super();
 	}
+	
+	public Libro(String titulo) {
+		this.titulo = titulo;
+	}
 
 	public Libro(String titulo, String autor, String categoria) {
-		this.titulo = titulo;
+		
 		this.autor = autor;
 		this.categoria = categoria;
 	}
-	
+
 	public String toString() {
 		return this.titulo + " (" + this.autor + ")";
 	}

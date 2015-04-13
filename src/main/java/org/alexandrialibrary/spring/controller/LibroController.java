@@ -25,16 +25,38 @@ public class LibroController extends AbstractController {
 	/**
 	 * Listado de libros
 	 * 
+	 * También permite buscar por título parcial de libros.
+	 * 
+	 * Ejemplo: /?titulo=anillos
+	 * 
 	 * @param model
 	 * @return
 	 */
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String index(Model model) {
+	public String index(@RequestParam(value = "titulo", required = false) String titulo, Model model) {
 		logger.info("Iniciamos libro/index [GET]");
-		List<Libro> libros = libroDAO.getAllLibros();
+		
+		Libro libro = null;
+		List<Libro> libros = null;
+		
+		if (titulo != null && !titulo.equals("")) {
+			// Si estamos buscando por título parcial:
+			// - Guardamos el nombre en el formulario "libro"
+			// - Obtenemos la lista de libros coincidentes
+			libro = new Libro(titulo);
+			libros = libroDAO.getLibrosByTituloParcial(titulo);
+		} else {
+			// Si no estamos buscando:
+			// - Creamos un formulario "libro" en blanco
+			// - Obtenemos la lista de libros por defecto
+			libro = new Libro();
+			libros = libroDAO.getAllLibros();
+		}
+
+		logger.info("Pasamos el formulario y el listado de libros a la vista.");
+		model.addAttribute("libro", libro);
 		model.addAttribute("libros", libros);
 
-		logger.info("Pasamos el listado de libros a la vista.");
 		return "libro/index";
 	}
 	

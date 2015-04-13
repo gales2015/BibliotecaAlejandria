@@ -8,6 +8,7 @@ import org.alexandrialibrary.spring.dao.AbstractDAO;
 import org.alexandrialibrary.spring.dao.LibroDAO;
 import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,6 +38,21 @@ public class LibroDAOImpl extends AbstractDAO implements LibroDAO {
 			Hibernate.initialize(ejemplar.getPrestamos());				
 		}
 		return libro;
+	}
+	
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<Libro> getLibrosByTituloParcial(String titulo) {
+		Criteria criteria = this.getCurrentSession().createCriteria(Libro.class);
+		criteria.add(Restrictions.ilike("titulo", "%"+titulo+"%"));
+		List<Libro> libros = criteria.list();
+		for (Libro libro : libros) {
+			List<Ejemplar> ejemplares = libro.getEjemplares();
+			for (Ejemplar ejemplar : ejemplares) {
+				Hibernate.initialize(ejemplar.getPrestamos());				
+			}
+		}
+		return libros;
 	}
 
 	@Override

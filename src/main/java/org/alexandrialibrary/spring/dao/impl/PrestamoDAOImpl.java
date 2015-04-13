@@ -10,6 +10,7 @@ import org.alexandrialibrary.spring.bean.Prestamo;
 import org.alexandrialibrary.spring.dao.AbstractDAO;
 import org.alexandrialibrary.spring.dao.PrestamoDAO;
 import org.hibernate.Criteria;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +28,21 @@ public class PrestamoDAOImpl extends AbstractDAO implements PrestamoDAO {
 	@Override
 	public Prestamo getPrestamo(long id) {
 		return (Prestamo) this.getCurrentSession().get(Prestamo.class, id);
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<Prestamo> getPrestamosByDevuelto(boolean isDevuelto) {
+		Criteria criteria = this.getCurrentSession().createCriteria(Prestamo.class);
+		
+		if (isDevuelto) {
+			// Devuelto: Fecha de devolución no nula.
+			criteria.add(Restrictions.isNotNull("fechaDevolucion"));
+		} else {
+			// No devuelto: Fecha de devolución nula.
+			criteria.add(Restrictions.isNull("fechaDevolucion"));			
+		}
+		return criteria.list(); 
 	}
 
 	@Override
@@ -60,5 +76,4 @@ public class PrestamoDAOImpl extends AbstractDAO implements PrestamoDAO {
 		Prestamo prestamo = getPrestamo(id);
 		this.getCurrentSession().delete(prestamo);
 	}
-
 }

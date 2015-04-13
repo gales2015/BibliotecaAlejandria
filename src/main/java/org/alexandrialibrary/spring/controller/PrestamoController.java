@@ -1,5 +1,6 @@
 package org.alexandrialibrary.spring.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -12,6 +13,7 @@ import org.alexandrialibrary.spring.dao.PrestamoDAO;
 import org.alexandrialibrary.spring.dao.UsuarioDAO;
 import org.alexandrialibrary.spring.editor.EjemplarEditor;
 import org.alexandrialibrary.spring.editor.UsuarioEditor;
+import org.alexandrialibrary.spring.form.PrestamoIsDevueltoForm;
 import org.alexandrialibrary.spring.util.PrestamoFormValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -61,12 +63,36 @@ public class PrestamoController extends AbstractController {
 	 * @return
 	 */
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String index(Model model) {
+	public String index(@RequestParam(value = "devuelto", required = false) Integer devueltoInt, Model model) {
 		logger.info("Iniciamos prestamo/index [GET]");
-		List<Prestamo> prestamos = prestamoDAO.getAllPrestamos();
-		model.addAttribute("prestamos", prestamos);
+		
+		
+		PrestamoIsDevueltoForm prestamoForm = null;
+		List<Prestamo> prestamos = null;
+		
+		
+		if (devueltoInt != null && devueltoInt >= 0) {
+			// False -> 0
+			// True -> Valor positivo
+			Integer devuelto = (devueltoInt > 0) ? 1 : 0;
+			
+			prestamoForm = new PrestamoIsDevueltoForm(devuelto);
+			prestamos = prestamoDAO.getPrestamosByDevuelto((devuelto == 1));
+		} else {
+			// Sin especificar o valor negativo
+			prestamoForm = new PrestamoIsDevueltoForm();
+			prestamos = prestamoDAO.getAllPrestamos();
+		}
 
-		logger.info("Pasamos el listado de prestamos a la vista.");
+		logger.info("Pasamos el formulario y el listado de prestamos a la vista.");
+		model.addAttribute("prestamoForm", prestamoForm);
+		model.addAttribute("prestamos", prestamos);
+		
+		HashMap<Integer, String> arrDevuelto = new HashMap<Integer, String>();
+		arrDevuelto.put(1, "Devuelto");
+		arrDevuelto.put(0, "Pendiente");
+	    model.addAttribute("arrDevuelto", arrDevuelto);
+		
 		return "prestamo/index";
 	}
 

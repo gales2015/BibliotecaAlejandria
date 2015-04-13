@@ -11,6 +11,8 @@ public interface UsuarioDAO {
 	List<Usuario> getAllUsuarios(); 
 
 	Usuario getUsuario(long id);
+
+	List<Usuario> getUsuariosByNombreParcial(String nombre);
 	
 	long save(Usuario usuario);
 	

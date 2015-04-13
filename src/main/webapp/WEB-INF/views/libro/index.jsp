@@ -1,6 +1,7 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="t" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <t:base>
 
 <jsp:attribute name="title">Listado de libros</jsp:attribute>
@@ -11,6 +12,21 @@
   <li><a href="<spring:url value="/" />">Inicio</a></li>
   <li class="active">Listado de libros</li>
 </ul>
+
+<spring:url var="urlFiltrarLibroForm" value="/libro/" />
+<form:form action="${urlFiltrarUsuarioForm}" method="get" commandName="libro" class="form-horizontal">
+<div class="no-padding overflow">
+	<div class="col-lg-2 col-lg-offset-5">
+		<label for="titulo" class="control-label">Buscar por título: </label>
+	</div>
+	<div class="col-lg-3">
+		<form:input type="text" class="form-control" path="titulo" id="titulo" placeholder="Título parcial" />
+	</div>
+	<div class="col-lg-2">
+		<button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span> Buscar libros</button>
+	</div>
+</div>
+</form:form>
 
 <div class="panel panel-primary">
   <div class="panel-heading">

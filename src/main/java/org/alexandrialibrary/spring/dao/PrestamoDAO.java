@@ -12,6 +12,8 @@ public interface PrestamoDAO {
 	List<Prestamo> getAllPrestamos(); 
 
 	Prestamo getPrestamo(long id);
+
+	List<Prestamo> getPrestamosByDevuelto(boolean isDevuelto);
 	
 	long save(Prestamo prestamo, Locale locale);
 	
