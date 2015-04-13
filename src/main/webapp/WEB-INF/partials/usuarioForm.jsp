@@ -29,7 +29,7 @@
     </div>
     <div class="form-group">
       <label for="dni" class="col-lg-1 control-label">DNI<span class="required" title="Campo obligatorio">*</span></label>
-      <spring:bind path="apellidos">
+      <spring:bind path="dni">
 	      <div class="${status.error ? 'has-error' : ''}">
 	      <div class="col-lg-6">
         	<form:input type="text" class="form-control" path="dni" id="dni" placeholder="DNI" />
@@ -40,7 +40,7 @@
     </div>
     <div class="form-group">
       <label for="email" class="col-lg-1 control-label">Email<span class="required" title="Campo obligatorio">*</span></label>
-      <spring:bind path="apellidos">
+      <spring:bind path="email">
 	      <div class="${status.error ? 'has-error' : ''}">
 	      <div class="col-lg-6">
         	<form:input type="text" class="form-control" path="email" id="email" placeholder="Email" />
@@ -51,7 +51,7 @@
     </div>
     <div class="form-group">
       <label for="email" class="col-lg-1 control-label">Dirección<span class="required" title="Campo obligatorio">*</span></label>
-      <spring:bind path="apellidos">
+      <spring:bind path="direccion">
 	      <div class="${status.error ? 'has-error' : ''}">
 	      <div class="col-lg-6">
         	<form:input type="text" class="form-control" path="direccion" id="direccion" placeholder="Dirección" />
