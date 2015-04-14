@@ -1,7 +1,7 @@
 package org.alexandrialibrary.spring.util;
 
 import org.alexandrialibrary.spring.bean.Usuario;
-import org.alexandrialibrary.spring.dao.UsuarioDAO;
+import org.alexandrialibrary.spring.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -12,7 +12,7 @@ import org.springframework.validation.Validator;
 public class UsuarioFormValidator implements Validator {
 
 	@Autowired
-	private UsuarioDAO usuarioDAO;
+	private UsuarioService usuarioService;
 	
 	@Override
 	public boolean supports(Class<?> clase) {
@@ -29,11 +29,11 @@ public class UsuarioFormValidator implements Validator {
 		
 		Usuario usuario = (Usuario) model;
 		
-		if (!usuarioDAO.isDniAvailable(usuario)) {
+		if (!usuarioService.isDniAvailable(usuario)) {
 			errors.rejectValue("dni", "required.dni", "Este número de DNI ya está en uso.");
 		}
 		
-		if (!usuarioDAO.isEmailAvailable(usuario)) {
+		if (!usuarioService.isEmailAvailable(usuario)) {
 			errors.rejectValue("email", "required.email", "Esta dirección de email ya está en uso.");
 		}
 		

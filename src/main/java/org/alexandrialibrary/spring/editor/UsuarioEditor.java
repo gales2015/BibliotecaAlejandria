@@ -3,7 +3,7 @@ package org.alexandrialibrary.spring.editor;
 import java.beans.PropertyEditorSupport;
 
 import org.alexandrialibrary.spring.bean.Usuario;
-import org.alexandrialibrary.spring.dao.UsuarioDAO;
+import org.alexandrialibrary.spring.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -11,14 +11,14 @@ import org.springframework.stereotype.Component;
 public class UsuarioEditor extends PropertyEditorSupport {
 
 	@Autowired
-	private UsuarioDAO usuarioDAO;
+	private UsuarioService usuarioService;
 
 	/**
 	 * Convierte de String a Usuario (cuando se envía un formulario)
 	 */
 	@Override
 	public void setAsText(String text) {
-		Usuario u = usuarioDAO.getUsuario(Long.valueOf(text));
+		Usuario u = usuarioService.getUsuario(Long.valueOf(text));
 		this.setValue(u);
 	}
 }

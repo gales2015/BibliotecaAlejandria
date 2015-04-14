@@ -1,10 +1,10 @@
-package org.alexandrialibrary.spring.dao;
+package org.alexandrialibrary.spring.service;
 
 import java.util.List;
 
 import org.alexandrialibrary.spring.bean.Usuario;
 
-public interface UsuarioDAO {
+public interface UsuarioService {
 		
 	List<Usuario> getAllUsuarios(); 
 

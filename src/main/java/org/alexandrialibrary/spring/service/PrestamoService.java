@@ -1,11 +1,11 @@
-package org.alexandrialibrary.spring.dao;
+package org.alexandrialibrary.spring.service;
 
 import java.util.List;
 import java.util.Locale;
 
 import org.alexandrialibrary.spring.bean.Prestamo;
 
-public interface PrestamoDAO {
+public interface PrestamoService {
 		
 	List<Prestamo> getAllPrestamos(); 
 

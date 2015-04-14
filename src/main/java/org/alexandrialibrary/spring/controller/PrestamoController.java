@@ -8,12 +8,12 @@ import org.alexandrialibrary.spring.bean.Ejemplar;
 import org.alexandrialibrary.spring.bean.Libro;
 import org.alexandrialibrary.spring.bean.Prestamo;
 import org.alexandrialibrary.spring.bean.Usuario;
-import org.alexandrialibrary.spring.dao.LibroDAO;
-import org.alexandrialibrary.spring.dao.PrestamoDAO;
-import org.alexandrialibrary.spring.dao.UsuarioDAO;
 import org.alexandrialibrary.spring.editor.EjemplarEditor;
 import org.alexandrialibrary.spring.editor.UsuarioEditor;
 import org.alexandrialibrary.spring.form.PrestamoIsDevueltoForm;
+import org.alexandrialibrary.spring.service.LibroService;
+import org.alexandrialibrary.spring.service.PrestamoService;
+import org.alexandrialibrary.spring.service.UsuarioService;
 import org.alexandrialibrary.spring.util.PrestamoFormValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -33,13 +33,13 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class PrestamoController extends AbstractController {
 	
 	@Autowired
-	private PrestamoDAO prestamoDAO;
+	private PrestamoService prestamoService;
 
 	@Autowired
-	private UsuarioDAO usuarioDAO;
+	private UsuarioService usuarioService;
 
 	@Autowired
-	private LibroDAO libroDAO;
+	private LibroService libroService;
 
 	@Autowired
 	private PrestamoFormValidator validator;
@@ -77,11 +77,11 @@ public class PrestamoController extends AbstractController {
 			Integer devuelto = (devueltoInt > 0) ? 1 : 0;
 			
 			prestamoForm = new PrestamoIsDevueltoForm(devuelto);
-			prestamos = prestamoDAO.getPrestamosByDevuelto((devuelto == 1));
+			prestamos = prestamoService.getPrestamosByDevuelto((devuelto == 1));
 		} else {
 			// Sin especificar o valor negativo
 			prestamoForm = new PrestamoIsDevueltoForm();
-			prestamos = prestamoDAO.getAllPrestamos();
+			prestamos = prestamoService.getAllPrestamos();
 		}
 
 		logger.info("Pasamos el formulario y el listado de prestamos a la vista.");
@@ -115,7 +115,7 @@ public class PrestamoController extends AbstractController {
 		Prestamo prestamo = new Prestamo();
 		if (usuario_id != null) {
 			// Si nos especifican un usuario
-			Usuario usuario = usuarioDAO.getUsuario(usuario_id);
+			Usuario usuario = usuarioService.getUsuario(usuario_id);
 			prestamo.setUsuario(usuario);
 		}
 		
@@ -126,10 +126,10 @@ public class PrestamoController extends AbstractController {
 		
 		model.addAttribute("prestamo", prestamo);
 		
-		List<Usuario> usuarios = usuarioDAO.getAllUsuarios();
+		List<Usuario> usuarios = usuarioService.getAllUsuarios();
 		model.addAttribute("usuarios", usuarios);
 		
-		List<Libro> libros = libroDAO.getAllLibros();
+		List<Libro> libros = libroService.getAllLibros();
 		model.addAttribute("libros", libros);
 		
 		logger.info("Pasamos un prestamo nuevo a la vista, para vincularlo al form.");
@@ -153,10 +153,10 @@ public class PrestamoController extends AbstractController {
 		if (result.hasErrors()) {
 			logger.info("Formulario con errores, mostramos de nuevo el formulario.");
 			
-			List<Usuario> usuarios = usuarioDAO.getAllUsuarios();
+			List<Usuario> usuarios = usuarioService.getAllUsuarios();
 			model.addAttribute("usuarios", usuarios);
 			
-			List<Libro> libros = libroDAO.getAllLibros();
+			List<Libro> libros = libroService.getAllLibros();
 			model.addAttribute("libros", libros);
 			
 			return "prestamo/nuevo";
@@ -164,7 +164,7 @@ public class PrestamoController extends AbstractController {
 
 		logger.info("Formulario correcto! Guardamos el prestamo.");
 		
-		prestamoDAO.save(prestamo, locale);
+		prestamoService.save(prestamo, locale);
 		
 		redirectAttributes.addFlashAttribute("success", 
 				String.format("El préstamo del libro <strong>%s</strong> para el usuario <strong>%s %s</strong> se ha realizado con éxito.", 
@@ -186,13 +186,13 @@ public class PrestamoController extends AbstractController {
 	public String devolver(@PathVariable Long id, final RedirectAttributes redirectAttributes) {
 		logger.info("Iniciamos prestamo/devolver/{id} [GET]");
 		
-		Prestamo prestamo = prestamoDAO.getPrestamo(id);
+		Prestamo prestamo = prestamoService.getPrestamo(id);
 		
 		if (!prestamo.isDevuelto()) {			
 			// Si no está devuelto, lo actualizamos (se establecerá la fecha de devolución)
 			logger.info("Actualizamos la información del préstamo estableciendo la devolución.");
 			
-			prestamoDAO.update(prestamo);
+			prestamoService.update(prestamo);
 			
 			redirectAttributes.addFlashAttribute("success", 
 					String.format("El préstamo del libro <strong>%s</strong> para el usuario <strong>%s %s</strong> se ha devuelto con éxito.", 

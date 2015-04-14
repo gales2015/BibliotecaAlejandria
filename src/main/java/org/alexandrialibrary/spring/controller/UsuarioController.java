@@ -3,7 +3,7 @@ package org.alexandrialibrary.spring.controller;
 import java.util.List;
 
 import org.alexandrialibrary.spring.bean.Usuario;
-import org.alexandrialibrary.spring.dao.UsuarioDAO;
+import org.alexandrialibrary.spring.service.UsuarioService;
 import org.alexandrialibrary.spring.util.UsuarioFormValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,7 +21,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class UsuarioController extends AbstractController {
 	
 	@Autowired
-	private UsuarioDAO usuarioDAO;
+	private UsuarioService usuarioService;
 
 	@Autowired
 	private UsuarioFormValidator validator;
@@ -48,13 +48,13 @@ public class UsuarioController extends AbstractController {
 			// - Guardamos el nombre en el formulario "usuario"
 			// - Obtenemos la lista de usuarios coincidentes
 			usuario = new Usuario(nombre);
-			usuarios = usuarioDAO.getUsuariosByNombreParcial(nombre);
+			usuarios = usuarioService.getUsuariosByNombreParcial(nombre);
 		} else {
 			// Si no estamos buscando:
 			// - Creamos un formulario "usuario" en blanco
 			// - Obtenemos la lista de usuarios por defecto
 			usuario = new Usuario();
-			usuarios = usuarioDAO.getAllUsuarios();
+			usuarios = usuarioService.getAllUsuarios();
 		}
 
 		logger.info("Pasamos el formulario y el listado de usuarios a la vista.");
@@ -101,7 +101,7 @@ public class UsuarioController extends AbstractController {
 
 		logger.info("Formulario correcto! Guardamos el usuario.");
 
-		usuarioDAO.save(usuario);
+		usuarioService.save(usuario);
 		
 		redirectAttributes.addFlashAttribute("success", String.format("Usuario '%s %s' creado con éxito.", 
 				usuario.getNombre(), usuario.getApellidos()));
@@ -121,7 +121,7 @@ public class UsuarioController extends AbstractController {
 	public String ver(@PathVariable Long id, Model model) {
 		logger.info("Iniciamos usuario/ver/{id} [GET]");
 		
-		Usuario usuario = usuarioDAO.getUsuario(id);		
+		Usuario usuario = usuarioService.getUsuario(id);		
 		model.addAttribute("usuario", usuario);
 		
 		return "usuario/ver";
@@ -138,7 +138,7 @@ public class UsuarioController extends AbstractController {
 	public String eliminar(@PathVariable Long id, Model model, final RedirectAttributes redirectAttributes) {
 		logger.info("Iniciamos usuario/eliminar/{id} [GET]");
 
-		Usuario usuario = usuarioDAO.getUsuario(id);
+		Usuario usuario = usuarioService.getUsuario(id);
 		if (usuario.getHasPrestamosPendientes()) {
 			
 			redirectAttributes.addFlashAttribute("danger", 
@@ -151,7 +151,7 @@ public class UsuarioController extends AbstractController {
 		}
 
 		logger.info("No tiene préstamos pendientes, eliminamos el usuario.");
-		usuarioDAO.delete(id);
+		usuarioService.delete(id);
 		
 		redirectAttributes.addFlashAttribute("success", String.format("Usuario <strong>%s %s</strong> eliminado con éxito.", 
 				usuario.getNombre(), usuario.getApellidos()));
@@ -171,7 +171,7 @@ public class UsuarioController extends AbstractController {
 	public String editar(@PathVariable Long id, Model model) {
 		logger.info("Iniciamos usuario/editar/{id} [GET]");
 		
-		Usuario usuario = usuarioDAO.getUsuario(id);		
+		Usuario usuario = usuarioService.getUsuario(id);		
 		model.addAttribute("usuario", usuario);
 		
 		return "usuario/editar";
@@ -198,7 +198,7 @@ public class UsuarioController extends AbstractController {
 
 		logger.info("Formulario correcto! Guardamos el usuario.");
 
-		usuarioDAO.update(usuario);
+		usuarioService.update(usuario);
 
 		logger.info("Redireccionamos a usuario/listado [GET]");
 		return "redirect:/usuario/";

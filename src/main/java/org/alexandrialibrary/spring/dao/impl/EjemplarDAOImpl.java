@@ -8,10 +8,8 @@ import org.alexandrialibrary.spring.dao.EjemplarDAO;
 import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 @Repository
-@Transactional
 public class EjemplarDAOImpl extends AbstractDAO implements EjemplarDAO {
 	
 	@Override

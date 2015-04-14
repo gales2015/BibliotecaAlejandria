@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.alexandrialibrary.spring.bean.Ejemplar;
 import org.alexandrialibrary.spring.bean.Libro;
-import org.alexandrialibrary.spring.dao.LibroDAO;
+import org.alexandrialibrary.spring.service.LibroService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class LibroController extends AbstractController {
 	
 	@Autowired
-	private LibroDAO libroDAO;
+	private LibroService libroService;
 
 	/**
 	 * Listado de libros
@@ -44,13 +44,13 @@ public class LibroController extends AbstractController {
 			// - Guardamos el nombre en el formulario "libro"
 			// - Obtenemos la lista de libros coincidentes
 			libro = new Libro(titulo);
-			libros = libroDAO.getLibrosByTituloParcial(titulo);
+			libros = libroService.getLibrosByTituloParcial(titulo);
 		} else {
 			// Si no estamos buscando:
 			// - Creamos un formulario "libro" en blanco
 			// - Obtenemos la lista de libros por defecto
 			libro = new Libro();
-			libros = libroDAO.getAllLibros();
+			libros = libroService.getAllLibros();
 		}
 
 		logger.info("Pasamos el formulario y el listado de libros a la vista.");
@@ -71,7 +71,7 @@ public class LibroController extends AbstractController {
 	public String ver(@PathVariable Long isbn, Model model) {
 		logger.info("Iniciamos libro/ver/{isbn} [GET]");
 		
-		Libro libro = libroDAO.getLibro(isbn);		
+		Libro libro = libroService.getLibro(isbn);		
 		model.addAttribute("libro", libro);
 		
 		return "libro/ver";
@@ -87,7 +87,7 @@ public class LibroController extends AbstractController {
 	public @ResponseBody long[] ejemplares(@RequestParam(value = "isbn", required = true) Long isbn) {
 		logger.info("Iniciamos libro/ejemplares.json?isbn={isbn} [GET]");
 		
-		Libro libro = libroDAO.getLibro(isbn);
+		Libro libro = libroService.getLibro(isbn);
 		long[] ejemplares = new long[libro.getTotalEjemplaresLibres()];
 		int index = 0;
 		

@@ -1,10 +1,10 @@
-package org.alexandrialibrary.spring.dao;
+package org.alexandrialibrary.spring.service;
 
 import java.util.List;
 
 import org.alexandrialibrary.spring.bean.Ejemplar;
 
-public interface EjemplarDAO {
+public interface EjemplarService {
 		
 	List<Ejemplar> getAllEjemplares();
 
