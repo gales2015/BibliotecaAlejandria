@@ -59,6 +59,10 @@ public class PrestamoController extends AbstractController {
 	/**
 	 * Listado de préstamos
 	 * 
+	 * También permite filtrar por préstamos devueltos o pendientes.
+	 * 
+	 * Ejemplo: /?devuelto=1
+	 * 
 	 * @param model
 	 * @return
 	 */

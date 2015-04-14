@@ -29,14 +29,32 @@ public class UsuarioFormValidator implements Validator {
 		
 		Usuario usuario = (Usuario) model;
 		
-		if (!usuarioService.isDniAvailable(usuario)) {
-			errors.rejectValue("dni", "required.dni", "Este número de DNI ya está en uso.");
+		// Comprobaciones de DNI
+		String dniClean = usuario.getDni().trim();
+		if (dniClean.length() > 0) {
+			// Si se ha rellenado el DNI, comprobamos:
+			if (dniClean.length() != 9 || !(dniClean.matches("[0-9]{8}[a-zA-Z]{1}"))) {
+				// No cumple el formato 8 números y 1 letra (ejemplo: 12345678A)
+				errors.rejectValue("dni", "required.dni", "El DNI debe ser 8 números y 1 letra.");			
+			} else if (!usuarioService.isDniAvailable(usuario)) {
+				// DNI ya en uso
+				errors.rejectValue("dni", "required.dni", "Este número de DNI ya está en uso.");
+			}			
 		}
 		
-		if (!usuarioService.isEmailAvailable(usuario)) {
-			errors.rejectValue("email", "required.email", "Esta dirección de email ya está en uso.");
+		// Comprobaciones de Email
+		String emailClean = usuario.getEmail().trim();
+		if (emailClean.length() > 0) {
+			// Si se ha rellenado el Email, comprobamos:
+			if (emailClean.length() < 6 || !(emailClean
+					.matches("[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})"))) {
+				// No cumple el formato de email
+				errors.rejectValue("email", "required.email", "Email incorrecto o incompleto (formato incorrecto).");
+			} else if (!usuarioService.isEmailAvailable(usuario)) {
+				// Email ya en uso
+				errors.rejectValue("email", "required.email", "Esta dirección de email ya está en uso.");
+			}
 		}
-		
 	}
 
 }

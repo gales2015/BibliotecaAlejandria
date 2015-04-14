@@ -31,9 +31,11 @@ public class LibroDAOImpl extends AbstractDAO implements LibroDAO {
 	@Override
 	public Libro getLibro(long isbn) {
 		Libro libro = (Libro) this.getCurrentSession().get(Libro.class, isbn);
-		List<Ejemplar> ejemplares = libro.getEjemplares();
-		for (Ejemplar ejemplar : ejemplares) {
-			Hibernate.initialize(ejemplar.getPrestamos());				
+		if (libro != null) {
+			List<Ejemplar> ejemplares = libro.getEjemplares();
+			for (Ejemplar ejemplar : ejemplares) {
+				Hibernate.initialize(ejemplar.getPrestamos());				
+			}			
 		}
 		return libro;
 	}

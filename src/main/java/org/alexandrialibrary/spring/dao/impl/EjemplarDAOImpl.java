@@ -26,7 +26,9 @@ public class EjemplarDAOImpl extends AbstractDAO implements EjemplarDAO {
 	@Override
 	public Ejemplar getEjemplar(long id) {
 		Ejemplar ejemplar = (Ejemplar) this.getCurrentSession().get(Ejemplar.class, id);
-		Hibernate.initialize(ejemplar.getPrestamos());
+		if (ejemplar != null) {
+			Hibernate.initialize(ejemplar.getPrestamos());			
+		}
 		
 		return ejemplar;
 	}

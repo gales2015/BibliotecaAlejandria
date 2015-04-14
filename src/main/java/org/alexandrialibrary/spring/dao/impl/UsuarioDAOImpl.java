@@ -29,7 +29,9 @@ public class UsuarioDAOImpl extends AbstractDAO implements UsuarioDAO {
 	@Override
 	public Usuario getUsuario(long id) {
 		Usuario usuario = (Usuario) this.getCurrentSession().get(Usuario.class, id);
-		Hibernate.initialize(usuario.getPrestamos());
+		if (usuario != null) {
+			Hibernate.initialize(usuario.getPrestamos());			
+		}
 		
 		return usuario;
 	}
