@@ -44,7 +44,7 @@
 		    <td>${ejemplar.id}</td>
 		    <td>${ejemplar.prestado? 'Prestado' : 'Libre'}</td>
 		    <td>
-		    	<a href="<spring:url value="/prestamo/${ejemplar.prestado? 'devolver/' : 'nuevo?libro='}${ejemplar.prestado? ejemplar.prestamoIdPendiente : libro.isbn}" />" class="btn btn-${ejemplar.prestado? 'success' : 'primary'} btn-xs">${ejemplar.prestado? 'Devolver' : 'Prestar'}</a>
+		    	<a href="<spring:url value="/prestamo/${ejemplar.prestado? 'devolver/' : 'nuevo?ejemplar='}${ejemplar.prestado? ejemplar.prestamoIdPendiente : ejemplar.id}" />" class="btn btn-${ejemplar.prestado? 'success' : 'primary'} btn-xs">${ejemplar.prestado? 'Devolver' : 'Prestar'}</a>
 		    </td>
 		  </tr>
 		</c:forEach>

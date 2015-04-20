@@ -44,7 +44,7 @@ public class Ejemplar implements Serializable {
 	}
 	
 	public String toString() {
-		return String.valueOf(this.id) + " (" + this.libro + ")";
+		return "ID " + String.valueOf(this.id);
 	}
 	/* -------- */
 	

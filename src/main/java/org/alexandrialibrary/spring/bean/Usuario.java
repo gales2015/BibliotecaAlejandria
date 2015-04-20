@@ -29,13 +29,9 @@ public class Usuario implements Serializable {
 	@Column(name = "apellidos")
 	private String apellidos;
 
-	// TODO Validar que DNI sea único antes de guardar
-	// TODO Validar regex con formato de DNI
 	@Column(name = "dni",unique = true)
 	private String dni;
 
-	// TODO Validar que Email sea único antes de guardar
-	// TODO Validar regex con formato de Email
 	@Column(name = "email",unique = true)
 	private String email;
 

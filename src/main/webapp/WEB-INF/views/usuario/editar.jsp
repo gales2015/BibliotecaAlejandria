@@ -4,7 +4,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <t:base>
 
-<jsp:attribute name="title">Nuevo usuario</jsp:attribute>
+<jsp:attribute name="title">Editar usuario</jsp:attribute>
 
 <jsp:body>
 

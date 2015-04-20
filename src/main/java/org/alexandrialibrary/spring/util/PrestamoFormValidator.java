@@ -1,6 +1,6 @@
 package org.alexandrialibrary.spring.util;
 
-import org.alexandrialibrary.spring.bean.Usuario;
+import org.alexandrialibrary.spring.bean.Prestamo;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
@@ -11,7 +11,7 @@ public class PrestamoFormValidator implements Validator {
 
 	@Override
 	public boolean supports(Class<?> clase) {
-		return Usuario.class.isAssignableFrom(clase);
+		return Prestamo.class.isAssignableFrom(clase);
 	}
 
 	@Override

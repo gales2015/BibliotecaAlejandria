@@ -35,8 +35,8 @@ $("#libro").change(function(){
 	}
 });
 
-// Al cargar la página, hacemos la primera comprobación
-$("#libro").trigger("change");
+// Al cargar la página, deshabilitamos el ejemplar si no hubiera un libro seleccionado.
+$("#ejemplar").prop('disabled', ($("#libro").val() == -1));
 </jsp:attribute>
 
 <jsp:body>
@@ -102,7 +102,7 @@ $("#libro").trigger("change");
 	      <div class="col-lg-6">
 	      <form:select path="ejemplar" id="ejemplar" class="form-control">
 				<form:option value="-1">Selecciona un ejemplar</form:option>
-				<form:options items="${ejemplares}" itemLabel="libro" itemValue="id" />
+				<form:options items="${ejemplares}" itemValue="id" />
 			</form:select>
 	      	</div>
 	      	<form:errors path="ejemplar" cssClass="control-label control-label-left col-lg-5" element="label" />

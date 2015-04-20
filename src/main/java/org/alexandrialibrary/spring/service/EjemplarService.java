@@ -15,4 +15,6 @@ public interface EjemplarService {
 	void update(Ejemplar ejemplar);
 	
 	void delete(long id);
+
+	List<Ejemplar> getEjemplaresLibresForIsbn(long libro_isbn);
 }

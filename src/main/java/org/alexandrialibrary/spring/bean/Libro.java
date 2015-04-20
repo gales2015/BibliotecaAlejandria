@@ -107,7 +107,6 @@ public class Libro implements Serializable {
 	}
 	
 	public int getTotalEjemplaresPrestados() {
-		// TODO Calcular ejemplares prestado de la lista
 		int total = 0;
 		for (Ejemplar ejemplar : ejemplares) {
 			if (ejemplar.isPrestado()) {

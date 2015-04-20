@@ -41,4 +41,9 @@ public class EjemplarServiceImpl implements EjemplarService {
 		ejemplarDAO.delete(id);
 	}
 
+	@Override
+	public List<Ejemplar> getEjemplaresLibresForIsbn(long libro_isbn) {
+		return ejemplarDAO.getEjemplaresLibresForIsbn(libro_isbn);
+	}
+
 }

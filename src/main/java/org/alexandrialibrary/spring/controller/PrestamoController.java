@@ -11,6 +11,7 @@ import org.alexandrialibrary.spring.bean.Usuario;
 import org.alexandrialibrary.spring.editor.EjemplarEditor;
 import org.alexandrialibrary.spring.editor.UsuarioEditor;
 import org.alexandrialibrary.spring.form.PrestamoIsDevueltoForm;
+import org.alexandrialibrary.spring.service.EjemplarService;
 import org.alexandrialibrary.spring.service.LibroService;
 import org.alexandrialibrary.spring.service.PrestamoService;
 import org.alexandrialibrary.spring.service.UsuarioService;
@@ -40,6 +41,9 @@ public class PrestamoController extends AbstractController {
 
 	@Autowired
 	private LibroService libroService;
+	
+	@Autowired
+	private EjemplarService ejemplarService;
 
 	@Autowired
 	private PrestamoFormValidator validator;
@@ -106,14 +110,14 @@ public class PrestamoController extends AbstractController {
 	 * Se pueden añadir a la URL las IDs de Usuario y/o Libro. Ejemplo:
 	 * 
 	 * prestamo/nuevo?usuario=1
-	 * prestamo/nuevo?usuario=1&libro=2
+	 * prestamo/nuevo?usuario=1&ejemplar=2
 	 * 
 	 * @param model
 	 * @return
 	 */
 	@RequestMapping(value = "/nuevo", method = RequestMethod.GET)
 	public String nuevo(@RequestParam(value = "usuario", required = false) Long usuario_id, 
-			@RequestParam(value = "libro", required = false) Long libro_isbn, Model model) {
+			@RequestParam(value = "ejemplar", required = false) Long ejemplar_id, Model model) {
 		logger.info("Iniciamos prestamo/nuevo [GET]");
 		
 		Prestamo prestamo = new Prestamo();
@@ -123,9 +127,15 @@ public class PrestamoController extends AbstractController {
 			prestamo.setUsuario(usuario);
 		}
 		
-		if (libro_isbn != null) {
+		if (ejemplar_id != null) {
 			// Si nos especifican un libro
+			Ejemplar ejemplar = ejemplarService.getEjemplar(ejemplar_id);
+			prestamo.setEjemplar(ejemplar);
+			long libro_isbn = ejemplar.getLibro().getIsbn();
 			model.addAttribute("libro_isbn", libro_isbn);
+
+			List<Ejemplar> ejemplares = ejemplarService.getEjemplaresLibresForIsbn(libro_isbn);
+			model.addAttribute("ejemplares", ejemplares);
 		}
 		
 		model.addAttribute("prestamo", prestamo);
@@ -162,6 +172,13 @@ public class PrestamoController extends AbstractController {
 			
 			List<Libro> libros = libroService.getAllLibros();
 			model.addAttribute("libros", libros);
+			
+			if (prestamo.getEjemplar() != null) {
+				long libro_isbn = prestamo.getEjemplar().getLibro().getIsbn();
+				model.addAttribute("libro_isbn", libro_isbn);
+				List<Ejemplar> ejemplares = ejemplarService.getEjemplaresLibresForIsbn(libro_isbn);
+				model.addAttribute("ejemplares", ejemplares);
+			}
 			
 			return "prestamo/nuevo";
 		}

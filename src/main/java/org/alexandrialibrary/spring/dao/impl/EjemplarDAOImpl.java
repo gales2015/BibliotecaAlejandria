@@ -7,6 +7,7 @@ import org.alexandrialibrary.spring.dao.AbstractDAO;
 import org.alexandrialibrary.spring.dao.EjemplarDAO;
 import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
+import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -47,6 +48,21 @@ public class EjemplarDAOImpl extends AbstractDAO implements EjemplarDAO {
 	public void delete(long id) {
 		Ejemplar ejemplar = getEjemplar(id);
 		this.getCurrentSession().delete(ejemplar);
+	}
+
+	/**
+	 * Devuelve aquellos ejemplares que cumplas un ISBN de libro asociado concreto, 
+	 * y que no estén actualmente prestados.
+	 */
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<Ejemplar> getEjemplaresLibresForIsbn(long libro_isbn) {
+		Query query = (Query) this.getCurrentSession().
+				createQuery("from Ejemplar e where e.libro.isbn = :libro_isbn and (select count(p) from Ejemplar e2 LEFT OUTER JOIN e2.prestamos p where e2.id = e.id and p.fechaDevolucion is null) = :prestamosPendientes");
+        query.setParameter("libro_isbn", (long) libro_isbn);
+        query.setParameter("prestamosPendientes", 0L);
+        
+        return query.list();
 	}
 
 }
