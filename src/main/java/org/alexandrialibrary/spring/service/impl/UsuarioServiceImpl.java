@@ -2,8 +2,8 @@ package org.alexandrialibrary.spring.service.impl;
 
 import java.util.List;
 
-import org.alexandrialibrary.spring.bean.Usuario;
 import org.alexandrialibrary.spring.dao.UsuarioDAO;
+import org.alexandrialibrary.spring.model.Usuario;
 import org.alexandrialibrary.spring.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

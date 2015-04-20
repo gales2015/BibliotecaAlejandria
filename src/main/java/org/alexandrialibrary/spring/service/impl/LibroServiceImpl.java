@@ -2,8 +2,8 @@ package org.alexandrialibrary.spring.service.impl;
 
 import java.util.List;
 
-import org.alexandrialibrary.spring.bean.Libro;
 import org.alexandrialibrary.spring.dao.LibroDAO;
+import org.alexandrialibrary.spring.model.Libro;
 import org.alexandrialibrary.spring.service.LibroService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

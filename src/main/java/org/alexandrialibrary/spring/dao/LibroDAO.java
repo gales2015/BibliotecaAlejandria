@@ -2,7 +2,7 @@ package org.alexandrialibrary.spring.dao;
 
 import java.util.List;
 
-import org.alexandrialibrary.spring.bean.Libro;
+import org.alexandrialibrary.spring.model.Libro;
 
 public interface LibroDAO {
 		

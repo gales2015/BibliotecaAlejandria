@@ -1,4 +1,4 @@
-package org.alexandrialibrary.spring.bean;
+package org.alexandrialibrary.spring.model;
 
 import java.io.Serializable;
 import java.text.DateFormat;

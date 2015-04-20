@@ -3,9 +3,9 @@ package org.alexandrialibrary.spring.dao.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.alexandrialibrary.spring.bean.Usuario;
 import org.alexandrialibrary.spring.dao.AbstractDAO;
 import org.alexandrialibrary.spring.dao.UsuarioDAO;
+import org.alexandrialibrary.spring.model.Usuario;
 import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
 import org.hibernate.Query;

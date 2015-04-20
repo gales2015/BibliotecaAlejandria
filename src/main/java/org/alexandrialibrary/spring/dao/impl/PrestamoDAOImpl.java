@@ -6,9 +6,9 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
-import org.alexandrialibrary.spring.bean.Prestamo;
 import org.alexandrialibrary.spring.dao.AbstractDAO;
 import org.alexandrialibrary.spring.dao.PrestamoDAO;
+import org.alexandrialibrary.spring.model.Prestamo;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;

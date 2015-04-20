@@ -2,7 +2,7 @@ package org.alexandrialibrary.spring.service;
 
 import java.util.List;
 
-import org.alexandrialibrary.spring.bean.Ejemplar;
+import org.alexandrialibrary.spring.model.Ejemplar;
 
 public interface EjemplarService {
 		

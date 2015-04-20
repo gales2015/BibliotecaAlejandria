@@ -1,6 +1,6 @@
 package org.alexandrialibrary.spring.util;
 
-import org.alexandrialibrary.spring.bean.Usuario;
+import org.alexandrialibrary.spring.model.Usuario;
 import org.alexandrialibrary.spring.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

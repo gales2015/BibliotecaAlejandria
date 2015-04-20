@@ -2,7 +2,7 @@ package org.alexandrialibrary.spring.dao;
 
 import java.util.List;
 
-import org.alexandrialibrary.spring.bean.Usuario;
+import org.alexandrialibrary.spring.model.Usuario;
 
 public interface UsuarioDAO {
 		

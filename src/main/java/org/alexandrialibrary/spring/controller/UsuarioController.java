@@ -2,7 +2,7 @@ package org.alexandrialibrary.spring.controller;
 
 import java.util.List;
 
-import org.alexandrialibrary.spring.bean.Usuario;
+import org.alexandrialibrary.spring.model.Usuario;
 import org.alexandrialibrary.spring.service.UsuarioService;
 import org.alexandrialibrary.spring.util.UsuarioFormValidator;
 import org.springframework.beans.factory.annotation.Autowired;

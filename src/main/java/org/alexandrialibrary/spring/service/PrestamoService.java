@@ -3,7 +3,7 @@ package org.alexandrialibrary.spring.service;
 import java.util.List;
 import java.util.Locale;
 
-import org.alexandrialibrary.spring.bean.Prestamo;
+import org.alexandrialibrary.spring.model.Prestamo;
 
 public interface PrestamoService {
 		

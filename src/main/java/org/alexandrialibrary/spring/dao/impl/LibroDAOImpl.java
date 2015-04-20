@@ -2,10 +2,10 @@ package org.alexandrialibrary.spring.dao.impl;
 
 import java.util.List;
 
-import org.alexandrialibrary.spring.bean.Ejemplar;
-import org.alexandrialibrary.spring.bean.Libro;
 import org.alexandrialibrary.spring.dao.AbstractDAO;
 import org.alexandrialibrary.spring.dao.LibroDAO;
+import org.alexandrialibrary.spring.model.Ejemplar;
+import org.alexandrialibrary.spring.model.Libro;
 import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
 import org.hibernate.criterion.Restrictions;

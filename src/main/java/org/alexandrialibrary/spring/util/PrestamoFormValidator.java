@@ -1,6 +1,6 @@
 package org.alexandrialibrary.spring.util;
 
-import org.alexandrialibrary.spring.bean.Prestamo;
+import org.alexandrialibrary.spring.model.Prestamo;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;

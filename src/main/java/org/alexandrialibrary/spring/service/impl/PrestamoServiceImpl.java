@@ -3,8 +3,8 @@ package org.alexandrialibrary.spring.service.impl;
 import java.util.List;
 import java.util.Locale;
 
-import org.alexandrialibrary.spring.bean.Prestamo;
 import org.alexandrialibrary.spring.dao.PrestamoDAO;
+import org.alexandrialibrary.spring.model.Prestamo;
 import org.alexandrialibrary.spring.service.PrestamoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

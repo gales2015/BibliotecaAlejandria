@@ -2,7 +2,7 @@ package org.alexandrialibrary.spring.editor;
 
 import java.beans.PropertyEditorSupport;
 
-import org.alexandrialibrary.spring.bean.Ejemplar;
+import org.alexandrialibrary.spring.model.Ejemplar;
 import org.alexandrialibrary.spring.service.EjemplarService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

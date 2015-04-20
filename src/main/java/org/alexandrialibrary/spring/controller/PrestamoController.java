@@ -4,13 +4,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
-import org.alexandrialibrary.spring.bean.Ejemplar;
-import org.alexandrialibrary.spring.bean.Libro;
-import org.alexandrialibrary.spring.bean.Prestamo;
-import org.alexandrialibrary.spring.bean.Usuario;
 import org.alexandrialibrary.spring.editor.EjemplarEditor;
 import org.alexandrialibrary.spring.editor.UsuarioEditor;
 import org.alexandrialibrary.spring.form.PrestamoIsDevueltoForm;
+import org.alexandrialibrary.spring.model.Ejemplar;
+import org.alexandrialibrary.spring.model.Libro;
+import org.alexandrialibrary.spring.model.Prestamo;
+import org.alexandrialibrary.spring.model.Usuario;
 import org.alexandrialibrary.spring.service.EjemplarService;
 import org.alexandrialibrary.spring.service.LibroService;
 import org.alexandrialibrary.spring.service.PrestamoService;

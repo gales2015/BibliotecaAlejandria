@@ -3,8 +3,8 @@ package org.alexandrialibrary.spring.controller;
 import java.util.Arrays;
 import java.util.List;
 
-import org.alexandrialibrary.spring.bean.Ejemplar;
-import org.alexandrialibrary.spring.bean.Libro;
+import org.alexandrialibrary.spring.model.Ejemplar;
+import org.alexandrialibrary.spring.model.Libro;
 import org.alexandrialibrary.spring.service.LibroService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

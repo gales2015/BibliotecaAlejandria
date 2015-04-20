@@ -45,7 +45,7 @@
 		</property>
 		<property name="packagesToScan">
 			<list>
-				<value>org.alexandrialibrary.spring.bean</value>
+				<value>org.alexandrialibrary.spring.model</value>
 			</list>
 		</property>
 	</bean>
