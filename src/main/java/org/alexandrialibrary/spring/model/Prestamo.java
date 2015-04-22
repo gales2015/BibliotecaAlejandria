@@ -15,9 +15,13 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+/**
+ * Clase Préstamo del modelo. Corresponde a la tabla 'prestamo'.
+ *
+ */
 @Entity
 @Table(name = "prestamo", uniqueConstraints=
-	@UniqueConstraint(columnNames={"fecha_inicio", "usuario_id", "ejemplar_id"}))
+	@UniqueConstraint(columnNames={"fecha_inicio", "usuario_id", "ejemplar_id"})) // Especificamos una clave única compuesta
 public class Prestamo implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -25,6 +29,12 @@ public class Prestamo implements Serializable {
 	private static DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM, new Locale("es", "ES"));
 	
 	public static final int DIAS_PRESTAMO = 30;
+	
+	/*
+	 * Atributos de Préstamo, que a su vez serán campos de la tabla 'prestamo'.
+	 * 
+	 * Las anotaciones indican a JPA (Java Persistence API) qué papel representa cada uno.
+	 */
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -63,7 +73,10 @@ public class Prestamo implements Serializable {
 	}
 	/* -------- */
 
-
+	/*
+	 * Getters/Setters
+	 */
+	
 	public long getId() {
 		return id;
 	}

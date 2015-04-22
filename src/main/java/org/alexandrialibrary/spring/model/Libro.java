@@ -16,12 +16,22 @@ import javax.persistence.Table;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
+/**
+ * Clase Libro del modelo. Corresponde a la tabla 'libro'.
+ *
+ */
 @Entity
 @Table(name = "libro")
 public class Libro implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	/*
+	 * Atributos de Libro, que a su vez serán campos de la tabla 'libro'.
+	 * 
+	 * Las anotaciones indican a JPA (Java Persistence API) qué papel representa cada uno.
+	 */
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "isbn")
@@ -61,6 +71,9 @@ public class Libro implements Serializable {
 	}
 	/* -------- */
 	
+	/*
+	 * Getters/Setters
+	 */
 
 	public long getIsbn() {
 		return isbn;
@@ -106,6 +119,9 @@ public class Libro implements Serializable {
 		return ejemplares.size();
 	}
 	
+	/**
+	 * Recorre todos sus ejemplares y devuelve cuántos de ellos están prestados.
+	 */
 	public int getTotalEjemplaresPrestados() {
 		int total = 0;
 		for (Ejemplar ejemplar : ejemplares) {

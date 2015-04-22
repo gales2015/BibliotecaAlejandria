@@ -29,10 +29,25 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+/**
+ * Prestamo controller.
+ * 
+ * Contendrá las rutas para todo lo relacionado con préstamos:
+ *  - Listado de préstamos
+ *  - Crear un nuevo préstamo
+ *  - Devolver un préstamo
+ * 
+ */
 @Controller
-@RequestMapping("/prestamo")
+@RequestMapping("/prestamo") // Prefijo para todas las rutas del controlador.
 public class PrestamoController extends AbstractController {
 	
+	/**
+	 * Servicios de préstamos, usuarios, libros y ejemplares, que llamarán a sus respectivos DAOs, 
+	 * que interactuará con Hibernate para las consultas.
+	 * 
+	 * No necesitan ser instanciados gracias a la anotación @Autowired.
+	 */
 	@Autowired
 	private PrestamoService prestamoService;
 
@@ -45,9 +60,18 @@ public class PrestamoController extends AbstractController {
 	@Autowired
 	private EjemplarService ejemplarService;
 
+	/**
+	 * Validador de préstamos que será utilizado al recibir por post un formulario enviado.
+	 */
 	@Autowired
 	private PrestamoFormValidator validator;
 	
+	/**
+	 * Editores de usuario y ejemplar. Se utilizarán en el initBinder().
+	 * 
+	 * Gracias a ellos, cuando venga una ID de usuario o ejemplar, 
+	 * ésta será convertida en el objeto Usuario o Ejemplar correspondiente.
+	 */
 	@Autowired
 	private UsuarioEditor usuarioEditor;
 
@@ -74,8 +98,11 @@ public class PrestamoController extends AbstractController {
 	public String index(@RequestParam(value = "devuelto", required = false) Integer devueltoInt, Model model) {
 		logger.info("Iniciamos prestamo/index [GET]");
 		
-		
+		// Creamos el formulario de filtrado de préstamos (todos/pendientes/devueltos)
 		PrestamoIsDevueltoForm prestamoForm = null;
+		
+		// El listado de préstamos se llenará de unos objetos u otros dependiendo 
+		// de lo que esté seleccionado en el formulario de filtrado de préstamos.
 		List<Prestamo> prestamos = null;
 		
 		
@@ -92,10 +119,12 @@ public class PrestamoController extends AbstractController {
 			prestamos = prestamoService.getAllPrestamos();
 		}
 
+		// Pasamos a la vista el formulario de préstamo (para filtrar) y el listado de préstamos
 		logger.info("Pasamos el formulario y el listado de prestamos a la vista.");
 		model.addAttribute("prestamoForm", prestamoForm);
 		model.addAttribute("prestamos", prestamos);
 		
+		// Creamos las opciones del select de filtrado de préstamos.
 		HashMap<Integer, String> arrDevuelto = new HashMap<Integer, String>();
 		arrDevuelto.put(1, "Devuelto");
 		arrDevuelto.put(0, "Pendiente");
@@ -112,6 +141,8 @@ public class PrestamoController extends AbstractController {
 	 * prestamo/nuevo?usuario=1
 	 * prestamo/nuevo?usuario=1&ejemplar=2
 	 * 
+	 * @param usuario_id
+	 * @param ejemplar_id
 	 * @param model
 	 * @return
 	 */
@@ -120,16 +151,19 @@ public class PrestamoController extends AbstractController {
 			@RequestParam(value = "ejemplar", required = false) Long ejemplar_id, Model model) {
 		logger.info("Iniciamos prestamo/nuevo [GET]");
 		
+		// Creamos un objeto préstamo para que actúe como formulario en la vista.
 		Prestamo prestamo = new Prestamo();
 		if (usuario_id != null) {
 			// Si nos especifican un usuario
 			Usuario usuario = usuarioService.getUsuario(usuario_id);
+			// Vinculamos el usuario al formulario de préstamos.
 			prestamo.setUsuario(usuario);
 		}
 		
 		if (ejemplar_id != null) {
 			// Si nos especifican un libro
 			Ejemplar ejemplar = ejemplarService.getEjemplar(ejemplar_id);
+			// Vinculamos el ejemplar al formulario de préstamos.
 			prestamo.setEjemplar(ejemplar);
 			long libro_isbn = ejemplar.getLibro().getIsbn();
 			model.addAttribute("libro_isbn", libro_isbn);
@@ -138,6 +172,9 @@ public class PrestamoController extends AbstractController {
 			model.addAttribute("ejemplares", ejemplares);
 		}
 		
+		/*
+		 * Pasamos a la vista tanto el formulario de préstamo, como listados de usuarios, ejemplares y libros.
+		 */
 		model.addAttribute("prestamo", prestamo);
 		
 		List<Usuario> usuarios = usuarioService.getAllUsuarios();
@@ -156,6 +193,8 @@ public class PrestamoController extends AbstractController {
 	 * @param prestamo
 	 * @param result
 	 * @param model
+	 * @param locale
+	 * @param redirectAttributes
 	 * @return
 	 */
 	@RequestMapping(value = "/nuevo", method = RequestMethod.POST)
@@ -163,9 +202,12 @@ public class PrestamoController extends AbstractController {
 			BindingResult result, Model model, Locale locale, final RedirectAttributes redirectAttributes) {
 		logger.info("Iniciamos prestamo/nuevo [POST]");
 
+		// Vinculamos el formulario a su validador para, obviamente, validarlo.
 		validator.validate(prestamo, result);
 		if (result.hasErrors()) {
 			logger.info("Formulario con errores, mostramos de nuevo el formulario.");
+			
+			// Cargamos todo lo necesario para enviar de nuevo al formulario, ya que contiene errores
 			
 			List<Usuario> usuarios = usuarioService.getAllUsuarios();
 			model.addAttribute("usuarios", usuarios);
@@ -182,17 +224,22 @@ public class PrestamoController extends AbstractController {
 			
 			return "prestamo/nuevo";
 		}
-
+		
+		// En caso de que no contenga errores...
 		logger.info("Formulario correcto! Guardamos el prestamo.");
 		
+		// Llamamos al servicio para guardar el nuevo préstamo.
 		prestamoService.save(prestamo, locale);
 		
+		// Generamos un mensaje "flash" que aparecerá en la siguiente página a la que se redirija.
+		// El mensaje flash nos informará de que el préstamo se ha creado con éxito.
 		redirectAttributes.addFlashAttribute("success", 
 				String.format("El préstamo del libro <strong>%s</strong> para el usuario <strong>%s %s</strong> se ha realizado con éxito.", 
 				prestamo.getEjemplar().getLibro().getTitulo(), prestamo.getUsuario().getNombre(), 
 				prestamo.getUsuario().getApellidos()));
 
 		logger.info("Redireccionamos a prestamo/listado [GET]");
+		// En vez de mostrar una vista, redireccionamos a la ruta del listado de préstamos.
 		return "redirect:/prestamo/";
 	}
 	
@@ -200,21 +247,25 @@ public class PrestamoController extends AbstractController {
 	 * Devolver un préstamo concreto, estableciendo la fecha de devolución como "ahora" [GET]
 	 * 
 	 * @param id
-	 * @param model
+	 * @param redirectAttributes
 	 * @return
 	 */
 	@RequestMapping(value = "/devolver/{id}", method = RequestMethod.GET)
 	public String devolver(@PathVariable Long id, final RedirectAttributes redirectAttributes) {
 		logger.info("Iniciamos prestamo/devolver/{id} [GET]");
 		
+		// Obtenemos el préstamo correspondiente a la ID
 		Prestamo prestamo = prestamoService.getPrestamo(id);
 		
 		if (!prestamo.isDevuelto()) {			
 			// Si no está devuelto, lo actualizamos (se establecerá la fecha de devolución)
 			logger.info("Actualizamos la información del préstamo estableciendo la devolución.");
 			
+			// Llamamos al servicio para guardar el préstamo modificado (devolución).
 			prestamoService.update(prestamo);
 			
+			// Generamos un mensaje "flash" que aparecerá en la siguiente página a la que se redirija.
+			// El mensaje flash nos informará de que el préstamo se ha devuelto con éxito.
 			redirectAttributes.addFlashAttribute("success", 
 					String.format("El préstamo del libro <strong>%s</strong> para el usuario <strong>%s %s</strong> se ha devuelto con éxito.", 
 					prestamo.getEjemplar().getLibro().getTitulo(), prestamo.getUsuario().getNombre(), 
@@ -222,6 +273,7 @@ public class PrestamoController extends AbstractController {
 		}
 
 		logger.info("Redireccionamos a prestamo/listado [GET]");
+		// En vez de mostrar una vista, redireccionamos a la ruta del listado de préstamos.
 		return "redirect:/prestamo/";
 	}
 

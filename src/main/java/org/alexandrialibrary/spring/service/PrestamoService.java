@@ -5,6 +5,11 @@ import java.util.Locale;
 
 import org.alexandrialibrary.spring.model.Prestamo;
 
+/**
+ * Interfaz Service para Préstamos con los métodos a ser implementados.
+ * 
+ * En las implementaciones se deberá llamar a los métodos pertinentes de las clases DAO.
+ */
 public interface PrestamoService {
 		
 	List<Prestamo> getAllPrestamos(); 

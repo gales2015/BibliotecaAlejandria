@@ -10,6 +10,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * Implementación del servicio de Préstamos.
+ * 
+ * Se anota con @Service y @Transactional para que la sesión que se comunica 
+ * con Hibernate esté iniciada en este punto.
+ * 
+ * Por norma general la clase del Servicio llama a la clase DAO correspondiente.
+ */
 @Service
 @Transactional
 public class PrestamoServiceImpl implements PrestamoService {

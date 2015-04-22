@@ -16,13 +16,32 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+/**
+ * Usuario controller.
+ * 
+ * Contendrá las rutas para todo lo relacionado con usuarios:
+ *  - Listado de usuarios
+ *  - Crear un nuevo usuario
+ *  - Ver un usuario
+ *  - Editar un usuario
+ *  - Eliminar un usuario
+ * 
+ */
 @Controller
-@RequestMapping("/usuario")
+@RequestMapping("/usuario") // Prefijo para todas las rutas del controlador.
 public class UsuarioController extends AbstractController {
 	
+	/**
+	 * Servicio de usuarios, que llamará al DAO de usuarios, que interactuará con Hibernate para las consultas.
+	 * 
+	 * No necesita ser instanciado gracias a la anotación @Autowired.
+	 */
 	@Autowired
 	private UsuarioService usuarioService;
 
+	/**
+	 * Validador de usuarios que será utilizado al recibir por post un formulario enviado.
+	 */
 	@Autowired
 	private UsuarioFormValidator validator;
 
@@ -33,6 +52,7 @@ public class UsuarioController extends AbstractController {
 	 * 
 	 * Ejemplo: /?nombre=Pepe
 	 * 
+	 * @param nombre
 	 * @param model
 	 * @return
 	 */
@@ -58,6 +78,7 @@ public class UsuarioController extends AbstractController {
 		}
 
 		logger.info("Pasamos el formulario y el listado de usuarios a la vista.");
+		// Los atributos pasados al modelo serán recibidos por la vista.
 		model.addAttribute("usuario", usuario);
 		model.addAttribute("usuarios", usuarios);
 
@@ -74,6 +95,7 @@ public class UsuarioController extends AbstractController {
 	public String nuevo(Model model) {
 		logger.info("Iniciamos usuario/nuevo [GET]");
 		
+		// Creamos un nuevo usuario que actuará como formulario en la vista.
 		model.addAttribute("usuario", new Usuario());
 		
 		logger.info("Pasamos un usuario nuevo a la vista, para vincularlo al form.");
@@ -86,6 +108,7 @@ public class UsuarioController extends AbstractController {
 	 * @param usuario
 	 * @param result
 	 * @param model
+	 * @param redirectAttributes
 	 * @return
 	 */
 	@RequestMapping(value = "/nuevo", method = RequestMethod.POST)
@@ -93,20 +116,26 @@ public class UsuarioController extends AbstractController {
 			BindingResult result, Model model, final RedirectAttributes redirectAttributes) {
 		logger.info("Iniciamos usuario/nuevo [POST]");
 
+		// Vinculamos el formulario a su validador para, obviamente, validarlo.
 		validator.validate(usuario, result);
 		if (result.hasErrors()) {
+			// Volvemos a mostrar el formulario, ya que contiene errores
 			logger.info("Formulario con errores, mostramos de nuevo el formulario.");
 			return "usuario/nuevo";
 		}
 
 		logger.info("Formulario correcto! Guardamos el usuario.");
 
+		// El formulario es correcto, así que llamamos al servicio para guardar el usuario
 		usuarioService.save(usuario);
 		
+		// Generamos un mensaje "flash" que aparecerá en la siguiente página a la que se redirija.
+		// El mensaje flash nos informará de que el usuario se ha creado con éxito.
 		redirectAttributes.addFlashAttribute("success", String.format("Usuario '%s %s' creado con éxito.", 
 				usuario.getNombre(), usuario.getApellidos()));
 
 		logger.info("Redireccionamos a usuario/listado [GET]");
+		// En vez de mostrar una vista, redireccionamos a la ruta del listado de usuarios.
 		return "redirect:/usuario/";
 	}
 	
@@ -121,6 +150,7 @@ public class UsuarioController extends AbstractController {
 	public String ver(@PathVariable Long id, Model model) {
 		logger.info("Iniciamos usuario/ver/{id} [GET]");
 		
+		// Obtenemos el usuario correspondiente a la ID y lo pasamos a la vista
 		Usuario usuario = usuarioService.getUsuario(id);		
 		model.addAttribute("usuario", usuario);
 		
@@ -138,25 +168,34 @@ public class UsuarioController extends AbstractController {
 	public String eliminar(@PathVariable Long id, Model model, final RedirectAttributes redirectAttributes) {
 		logger.info("Iniciamos usuario/eliminar/{id} [GET]");
 
+		// Obtenemos el préstamo correspondiente a la ID
 		Usuario usuario = usuarioService.getUsuario(id);
 		if (usuario.getHasPrestamosPendientes()) {
+			// Si el usuario tiene préstamos pendientes no permitiremos que sea eliminado
 			
+			// Generamos un mensaje "flash" que aparecerá en la siguiente página a la que se redirija.
+			// El mensaje flash nos informará de que el usuario no se ha podido eliminar por tener préstamos pendientes.
 			redirectAttributes.addFlashAttribute("danger", 
 					String.format("El usuario <strong>%s %s</strong> tiene préstamos pendientes y no se puede eliminar.", 
 					usuario.getNombre(), usuario.getApellidos()));
 			
 			logger.info("Tiene préstamos pendientes, no se puede eliminar.");
 			logger.info("Redireccionamos a usuario/ver/{id} [GET]");
+			// En vez de mostrar una vista, redireccionamos a la ruta de la ficha del usuario a eliminar.
 			return String.format("redirect:/usuario/ver/%d", id);
 		}
 
 		logger.info("No tiene préstamos pendientes, eliminamos el usuario.");
+		// En caso de no tener préstamos pendientes se llama al servicio para eliminar el usuario.
 		usuarioService.delete(id);
-		
+
+		// Generamos un mensaje "flash" que aparecerá en la siguiente página a la que se redirija.
+		// El mensaje flash nos informará de que el usuario se ha eliminado con éxito.
 		redirectAttributes.addFlashAttribute("success", String.format("Usuario <strong>%s %s</strong> eliminado con éxito.", 
 				usuario.getNombre(), usuario.getApellidos()));
 
 		logger.info("Redireccionamos a usuario/listado [GET]");
+		// En vez de mostrar una vista, redireccionamos a la ruta del listado de usuarios.
 		return "redirect:/usuario/";
 	}
 	
@@ -170,7 +209,8 @@ public class UsuarioController extends AbstractController {
 	@RequestMapping(value = "/editar/{id}", method = RequestMethod.GET)
 	public String editar(@PathVariable Long id, Model model) {
 		logger.info("Iniciamos usuario/editar/{id} [GET]");
-		
+
+		// Obtenemos el préstamo correspondiente a la ID y lo pasamos a la vista, donde actuará como formulario
 		Usuario usuario = usuarioService.getUsuario(id);		
 		model.addAttribute("usuario", usuario);
 		
@@ -190,17 +230,21 @@ public class UsuarioController extends AbstractController {
 			BindingResult result, Model model) {
 		logger.info("Iniciamos usuario/editar/{id} [POST]");
 
+		// Vinculamos el formulario a su validador para, obviamente, validarlo.
 		validator.validate(usuario, result);
 		if (result.hasErrors()) {
+			// Si tiene errores, lo devolvemos de nuevo al formulario.
 			logger.info("Formulario con errores, mostramos de nuevo el formulario.");
 			return "usuario/editar";
 		}
 
 		logger.info("Formulario correcto! Guardamos el usuario.");
-
+		
+		// El formulario es correcto, llamamos al servicio para que actualice el objeto usuario.
 		usuarioService.update(usuario);
 
 		logger.info("Redireccionamos a usuario/listado [GET]");
+		// En vez de mostrar una vista, redireccionamos a la ruta del listado de usuarios.
 		return "redirect:/usuario/";
 	}
 

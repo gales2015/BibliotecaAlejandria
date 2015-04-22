@@ -14,11 +14,21 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+/**
+ * Clase Ejemplar del modelo. Corresponde a la tabla 'ejemplar'.
+ *
+ */
 @Entity
 @Table(name = "ejemplar")
 public class Ejemplar implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+	
+	/*
+	 * Atributos de Ejemplar, que a su vez serán campos de la tabla 'ejemplar'.
+	 * 
+	 * Las anotaciones indican a JPA (Java Persistence API) qué papel representa cada uno.
+	 */
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -48,6 +58,9 @@ public class Ejemplar implements Serializable {
 	}
 	/* -------- */
 	
+	/*
+	 * Getters/Setters
+	 */
 
 	public long getId() {
 		return id;
@@ -82,6 +95,13 @@ public class Ejemplar implements Serializable {
 		this.prestamos = prestamos;
 	}
 	
+	/**
+	 * Si un ejemplar está pendiente de devolución tendrá uno 
+	 * (y solo uno) de sus préstamos asociados sin devolver.
+	 * 
+	 * Si hay uno pendiente, devolverá la ID de préstamo, 
+	 * en caso contrario devolverá null.
+	 */
 	@SuppressWarnings("null")
 	public long getPrestamoIdPendiente() {
 		for (Prestamo prestamo : prestamos) {

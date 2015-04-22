@@ -8,17 +8,33 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
+/**
+ * Clase validadora del formulario de Usuarios
+ */
 @Component("usuarioFormValidator")
 public class UsuarioFormValidator implements Validator {
 
+	/**
+	 * Mantenemos un servicio de Usuario activo para comprobar que los campos únicos 
+	 * (email y dni) no se repitan en la BBDD.
+	 */
 	@Autowired
 	private UsuarioService usuarioService;
 	
+	/**
+	 * La clase a la que se vincula.
+	 */
 	@Override
 	public boolean supports(Class<?> clase) {
 		return Usuario.class.isAssignableFrom(clase);
 	}
 
+	/**
+	 * Método validate() llamado desde el controlador al enviar el formulario.
+	 * 
+	 * Contiene las reglas para comprobar que el formulario se ha enviado correctamente. 
+	 * Establece los errores que se mostrarán en la vista en caso de que algo sea incorrecto.
+	 */
 	@Override
 	public void validate(Object model, Errors errors) {
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "nombre", "required.nombre", "Debe rellenar el nombre.");

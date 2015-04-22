@@ -4,6 +4,9 @@ import java.util.List;
 
 import org.alexandrialibrary.spring.model.Ejemplar;
 
+/**
+ * Interfaz DAO para Ejemplares con los métodos a ser implementados.
+ */
 public interface EjemplarDAO {
 		
 	List<Ejemplar> getAllEjemplares();

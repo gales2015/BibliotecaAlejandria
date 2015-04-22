@@ -4,6 +4,9 @@ import java.util.List;
 
 import org.alexandrialibrary.spring.model.Usuario;
 
+/**
+ * Interfaz DAO para Usuarios con los métodos a ser implementados.
+ */
 public interface UsuarioDAO {
 		
 	List<Usuario> getAllUsuarios(); 
