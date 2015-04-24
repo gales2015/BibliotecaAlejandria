@@ -17,7 +17,6 @@
 	<li>Daniel Miñana</li>
 	<li>Garikoitz Aguirre</li>
 	<li>Jon Ander Cermeño</li>
-	<li>Gonzalo Legarreta</li>
 </ul>
 
 <h1>¿Dónde puedo encontrar el código fuente de esta práctica?</h1>
